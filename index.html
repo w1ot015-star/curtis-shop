@@ -2,13 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>СХЕМНЫЙ ЦЕХ — 3D конструктор ПК с проводами и пинами</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>СХЕМНЫЙ ЦЕХ — 3D конструктор ПК</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -16,6 +17,7 @@
             background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
             color: #fff;
             overflow: hidden;
+            touch-action: pan-x pan-y;
         }
 
         /* ГЛАВНЫЙ ЭКРАН */
@@ -40,98 +42,92 @@
 
         .main-content {
             text-align: center;
-            max-width: 800px;
-            padding: 40px;
+            max-width: 90%;
+            padding: 30px 20px;
             background: rgba(10, 10, 30, 0.7);
             backdrop-filter: blur(20px);
-            border-radius: 40px;
+            border-radius: 30px;
             border: 2px solid #00ffff66;
-            box-shadow: 0 0 100px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
             animation: fadeInUp 0.8s ease;
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .main-title {
-            font-size: 4rem;
+            font-size: 2rem;
             font-weight: 900;
             background: linear-gradient(45deg, #ff44dd, #44ddff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 68, 221, 0.5);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-family: 'Orbitron', monospace;
         }
 
-        .main-subtitle {
-            font-size: 1.2rem;
-            color: #88aaff;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
+        @media (min-width: 768px) {
+            .main-title { font-size: 4rem; }
+            .main-content { padding: 40px; max-width: 800px; }
         }
 
-        .main-description {
+        .main-subtitle {
             font-size: 1rem;
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 40px;
-            padding: 0 20px;
+            color: #88aaff;
+            margin-bottom: 20px;
         }
+        @media (min-width: 768px) { .main-subtitle { font-size: 1.2rem; } }
+
+        .main-description {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        @media (min-width: 768px) { .main-description { font-size: 1rem; } }
 
         .main-features {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-bottom: 40px;
+            gap: 15px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
         .feature {
             background: rgba(0, 255, 255, 0.1);
             border: 1px solid #0ff;
-            border-radius: 15px;
-            padding: 15px 25px;
-            min-width: 150px;
+            border-radius: 12px;
+            padding: 10px 15px;
+            min-width: 100px;
         }
+        @media (min-width: 768px) { .feature { padding: 15px 25px; min-width: 150px; } }
 
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
+        .feature-icon { font-size: 1.5rem; margin-bottom: 5px; }
+        @media (min-width: 768px) { .feature-icon { font-size: 2rem; } }
 
-        .feature-text {
-            font-size: 0.9rem;
-            color: #0ff;
-        }
+        .feature-text { font-size: 0.7rem; color: #0ff; }
+        @media (min-width: 768px) { .feature-text { font-size: 0.9rem; } }
 
         .start-btn {
             background: linear-gradient(45deg, #ff44dd, #44ddff);
             border: none;
-            padding: 15px 50px;
-            font-size: 1.5rem;
+            padding: 12px 30px;
+            font-size: 1.2rem;
             font-weight: bold;
             color: #000;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: 0 0 30px rgba(68, 221, 255, 0.5);
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(68, 221, 255, 0.5);
         }
+        @media (min-width: 768px) { .start-btn { padding: 15px 50px; font-size: 1.5rem; } }
 
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 50px rgba(255, 68, 221, 0.8);
-        }
+        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 68, 221, 0.8); }
 
         .main-3d-bg {
             position: absolute;
@@ -143,20 +139,48 @@
             opacity: 0.3;
         }
 
-        /* ОСНОВНОЙ КОНСТРУКТОР */
+        /* ОСНОВНОЙ КОНСТРУКТОР - МОБИЛЬНАЯ АДАПТАЦИЯ */
         .app-container {
             display: flex;
+            flex-direction: column;
             height: 100vh;
             opacity: 0;
             transition: opacity 0.5s ease;
         }
+        @media (min-width: 1024px) {
+            .app-container { flex-direction: row; }
+        }
 
-        .app-container.visible {
-            opacity: 1;
+        .app-container.visible { opacity: 1; }
+
+        /* Мобильное меню */
+        .mobile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(10, 10, 26, 0.95);
+            border-bottom: 1px solid #00ffff44;
+            z-index: 20;
+        }
+        @media (min-width: 1024px) { .mobile-header { display: none; } }
+
+        .mobile-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: #0ff;
+        }
+
+        .mobile-menu-btn {
+            background: #ff44dd33;
+            border: 1px solid #ff44dd;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
 
         .catalog-panel {
-            width: 340px;
             background: rgba(10, 10, 26, 0.95);
             backdrop-filter: blur(10px);
             border-right: 1px solid #00ffff44;
@@ -164,16 +188,36 @@
             flex-direction: column;
             overflow-y: auto;
             z-index: 10;
+            transition: transform 0.3s ease;
+        }
+        @media (max-width: 1023px) {
+            .catalog-panel {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 85%;
+                max-width: 320px;
+                height: 100%;
+                transform: translateX(-100%);
+                z-index: 100;
+            }
+            .catalog-panel.open { transform: translateX(0); }
+        }
+        @media (min-width: 1024px) {
+            .catalog-panel { width: 300px; }
+        }
+        @media (min-width: 1400px) {
+            .catalog-panel { width: 340px; }
         }
 
         .viewer-panel {
             flex: 1;
             position: relative;
             background: #0a0a1a;
+            min-height: 300px;
         }
 
         .pins-panel {
-            width: 420px;
             background: rgba(10, 10, 26, 0.95);
             backdrop-filter: blur(10px);
             border-left: 1px solid #ff44dd44;
@@ -182,133 +226,121 @@
             overflow-y: auto;
             z-index: 10;
         }
+        @media (max-width: 1023px) {
+            .pins-panel {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 60%;
+                border-left: none;
+                border-top: 1px solid #ff44dd44;
+                transform: translateY(100%);
+                transition: transform 0.3s ease;
+                z-index: 90;
+            }
+            .pins-panel.open {
+                transform: translateY(0);
+            }
+        }
+        @media (min-width: 1024px) {
+            .pins-panel { width: 380px; }
+        }
+        @media (min-width: 1400px) {
+            .pins-panel { width: 420px; }
+        }
 
         .panel-header {
-            padding: 15px;
+            padding: 12px;
             border-bottom: 1px solid #00ffff66;
             font-family: 'Orbitron', monospace;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #0ff;
-            text-shadow: 0 0 10px #0ff;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+        @media (min-width: 768px) { .panel-header { padding: 15px; font-size: 1.2rem; } }
 
         .admin-badge {
             background: #ff44dd33;
             border: 1px solid #ff44dd;
             border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
+            padding: 4px 10px;
+            font-size: 0.65rem;
             cursor: pointer;
             transition: all 0.2s;
         }
+        @media (min-width: 768px) { .admin-badge { padding: 4px 12px; font-size: 0.7rem; } }
 
-        .admin-badge:hover, .admin-mode-active {
-            background: #ff44dd;
-            color: #000;
-            box-shadow: 0 0 15px #ff44dd;
-        }
-
-        .search-box {
-            padding: 15px;
-            border-bottom: 1px solid #333;
-        }
+        .search-box { padding: 10px; border-bottom: 1px solid #333; }
+        @media (min-width: 768px) { .search-box { padding: 15px; } }
 
         .search-input {
             width: 100%;
-            padding: 10px 15px;
+            padding: 8px 12px;
             background: #1e1e3a;
             border: 1px solid #0ff;
             border-radius: 25px;
             color: #fff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             outline: none;
         }
-
-        .search-input:focus {
-            box-shadow: 0 0 15px #0ff;
-        }
+        @media (min-width: 768px) { .search-input { padding: 10px 15px; font-size: 0.9rem; } }
 
         .categories {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            padding: 15px;
+            gap: 6px;
+            padding: 10px;
             border-bottom: 1px solid #333;
         }
+        @media (min-width: 768px) { .categories { gap: 8px; padding: 15px; } }
 
         .cat-btn {
-            padding: 6px 14px;
+            padding: 5px 10px;
             background: #1e1e3a;
             border: 1px solid #0ff;
             color: #0ff;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             transition: all 0.2s;
         }
-
-        .cat-btn.active, .cat-btn:hover {
-            background: #0ff;
-            color: #000;
-            box-shadow: 0 0 15px #0ff;
-        }
+        @media (min-width: 768px) { .cat-btn { padding: 6px 14px; font-size: 0.8rem; } }
 
         .components-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
-            padding: 15px;
+            gap: 8px;
+            padding: 10px;
             overflow-y: auto;
-            max-height: calc(100vh - 350px);
+            flex: 1;
         }
+        @media (min-width: 768px) { .components-grid { gap: 10px; padding: 15px; } }
 
         .component-card {
             background: #1e1e3a88;
             border: 1px solid #0ff;
             border-radius: 8px;
-            padding: 12px;
+            padding: 10px;
             cursor: pointer;
             transition: all 0.2s;
         }
+        @media (min-width: 768px) { .component-card { padding: 12px; } }
 
-        .component-card:hover {
-            transform: translateX(5px);
-            border-color: #f0f;
-            box-shadow: -5px 5px 15px #f0f3;
-        }
-
-        .component-card.selected {
-            border: 2px solid #ff4444;
-            background: #ff444422;
-        }
-
-        .component-card.hidden {
-            display: none;
-        }
-
-        .comp-name {
-            font-weight: bold;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-        }
+        .comp-name { font-weight: bold; font-size: 0.85rem; margin-bottom: 5px; }
+        @media (min-width: 768px) { .comp-name { font-size: 0.9rem; } }
 
         .comp-specs {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            font-size: 0.7rem;
+            gap: 6px;
+            font-size: 0.65rem;
             color: #aaa;
         }
-
-        .comp-specs span {
-            background: #00000066;
-            padding: 2px 8px;
-            border-radius: 12px;
-        }
+        @media (min-width: 768px) { .comp-specs { font-size: 0.7rem; } }
 
         .add-btn {
             margin-top: 8px;
@@ -319,449 +351,241 @@
             width: 100%;
             cursor: pointer;
             color: #0ff;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             transition: all 0.2s;
         }
-
-        .add-btn:hover {
-            background: #0ff;
-            color: #000;
-        }
+        @media (min-width: 768px) { .add-btn { font-size: 0.8rem; } }
 
         .installed-list {
-            padding: 15px;
+            padding: 10px;
             border-top: 1px solid #333;
             border-bottom: 1px solid #333;
         }
+        @media (min-width: 768px) { .installed-list { padding: 15px; } }
 
         .installed-item {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
-            font-size: 0.8rem;
+            padding: 5px 0;
+            font-size: 0.7rem;
             border-bottom: 1px solid #333;
         }
+        @media (min-width: 768px) { .installed-item { font-size: 0.8rem; } }
 
-        .preset-builds {
-            padding: 15px;
-            border-top: 1px solid #ff44dd66;
-            background: #ff44dd0a;
-        }
+        .preset-builds { padding: 10px; border-top: 1px solid #ff44dd66; background: #ff44dd0a; }
+        @media (min-width: 768px) { .preset-builds { padding: 15px; } }
 
-        .preset-title {
-            color: #ff44dd;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+        .preset-title { color: #ff44dd; font-size: 0.8rem; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        @media (min-width: 768px) { .preset-title { font-size: 0.9rem; } }
 
         .exit-admin-btn {
             background: #ff44dd33;
             border: 1px solid #ff44dd;
             border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
+            padding: 3px 8px;
+            font-size: 0.6rem;
             cursor: pointer;
         }
+        @media (min-width: 768px) { .exit-admin-btn { padding: 4px 12px; font-size: 0.7rem; } }
 
-        .exit-admin-btn:hover {
-            background: #ff44dd;
-            color: #000;
-        }
-
-        .preset-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
+        .preset-buttons { display: flex; flex-direction: column; gap: 6px; }
         .preset-btn {
             background: #2a2a4a;
             border: 1px solid #ff44dd;
             border-radius: 6px;
-            padding: 8px;
+            padding: 6px;
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
+            font-size: 0.7rem;
             color: #ff88dd;
         }
-
-        .preset-btn:hover {
-            background: #ff44dd;
-            color: #000;
-            box-shadow: 0 0 15px #ff44dd;
-        }
-
-        .connections-table {
-            padding: 15px;
-            border-top: 1px solid #333;
-            background: #0a0a1a;
-        }
-
-        .connections-title {
-            color: #0ff;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .connections-list {
-            background: #0f0f1f;
-            border-radius: 8px;
-            padding: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .connection-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #2a2a4a;
-            font-size: 0.75rem;
-        }
-
-        .connection-from {
-            color: #ff88dd;
-            font-weight: bold;
-        }
-
-        .connection-arrow {
-            color: #0ff;
-            font-size: 1rem;
-        }
-
-        .connection-to {
-            color: #88ff88;
-            font-weight: bold;
-        }
-
-        .connection-pins {
-            color: #aaa;
-            font-size: 0.65rem;
-        }
-
-        .no-connections {
-            text-align: center;
-            color: #666;
-            padding: 15px;
-            font-size: 0.8rem;
-        }
+        @media (min-width: 768px) { .preset-btn { padding: 8px; font-size: 0.8rem; } }
 
         .pins-container {
-            padding: 15px;
+            padding: 10px;
             flex: 1;
             overflow-y: auto;
             position: relative;
-            max-height: 400px;
+            max-height: 300px;
         }
+        @media (min-width: 768px) { .pins-container { padding: 15px; max-height: 400px; } }
 
         .component-pins {
             background: #0f0f1f;
             border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-left: 3px solid #0ff;
-            position: relative;
-        }
-
-        .component-pins h4 {
-            color: #0ff;
+            padding: 8px;
             margin-bottom: 10px;
-            font-size: 0.85rem;
+            border-left: 3px solid #0ff;
         }
+        @media (min-width: 768px) { .component-pins { padding: 12px; margin-bottom: 15px; } }
+
+        .component-pins h4 { color: #0ff; font-size: 0.75rem; margin-bottom: 8px; }
+        @media (min-width: 768px) { .component-pins h4 { font-size: 0.85rem; } }
 
         .pins-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 5px;
         }
+        @media (min-width: 768px) { .pins-grid { gap: 8px; min-width: 75px; } }
 
         .pin {
             background: #2a2a4a;
             border: 1px solid #44aaff;
             border-radius: 6px;
-            padding: 6px 4px;
+            padding: 4px 2px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.7rem;
-            position: relative;
+            font-size: 0.6rem;
         }
+        @media (min-width: 768px) { .pin { padding: 6px 4px; font-size: 0.7rem; } }
 
-        .pin:hover {
-            background: #3a3a6a;
-            transform: scale(1.02);
-        }
+        .pin.selected { background: #ffaa00; color: #000; box-shadow: 0 0 10px #ffaa00; border-color: #ffaa00; }
+        .pin.correct { background: #00aa00; color: #fff; box-shadow: 0 0 8px #00ff00; border-color: #0f0; }
+        .pin.wrong { background: #aa0000; color: #fff; box-shadow: 0 0 8px #ff0000; border-color: #f00; }
+        .pin.powered { background: #0f08; border-color: #0f0; }
 
-        .pin.selected {
-            background: #ffaa00;
-            color: #000;
-            box-shadow: 0 0 15px #ffaa00;
-            border-color: #ffaa00;
-        }
+        .connections-table { padding: 10px; border-top: 1px solid #333; background: #0a0a1a; }
+        @media (min-width: 768px) { .connections-table { padding: 15px; } }
 
-        .pin.correct {
-            background: #00ff00;
-            color: #000;
-            box-shadow: 0 0 15px #00ff00;
-            border-color: #00ff00;
+        .connections-list {
+            background: #0f0f1f;
+            border-radius: 8px;
+            padding: 8px;
+            max-height: 150px;
+            overflow-y: auto;
         }
+        @media (min-width: 768px) { .connections-list { max-height: 200px; } }
 
-        .pin.wrong {
-            background: #ff0000;
-            color: #fff;
-            box-shadow: 0 0 15px #ff0000;
-            border-color: #ff0000;
+        .connection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #2a2a4a;
+            font-size: 0.65rem;
         }
-
-        .pin.connected {
-            border-color: #0f0;
-            box-shadow: 0 0 10px #0f0;
-        }
-
-        .pin.powered {
-            background: #0f08;
-            border-color: #0f0;
-        }
-
-        .arrow-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 15;
-        }
-
-        .pin-number {
-            font-weight: bold;
-            font-size: 0.7rem;
-        }
-
-        .pin-name {
-            font-size: 0.55rem;
-            color: #ccc;
-        }
+        @media (min-width: 768px) { .connection-item { font-size: 0.75rem; padding: 8px; } }
 
         .controls {
-            padding: 15px;
+            padding: 10px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             border-top: 1px solid #333;
         }
+        @media (min-width: 768px) { .controls { padding: 15px; gap: 10px; } }
 
         .btn {
             flex: 1;
-            padding: 10px;
+            padding: 8px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
+        @media (min-width: 768px) { .btn { padding: 10px; font-size: 0.8rem; } }
 
-        .btn-power {
-            background: linear-gradient(45deg, #0f0, #0ff);
-            color: #000;
-        }
+        .btn-power { background: linear-gradient(45deg, #0f0, #0ff); color: #000; }
+        .btn-reset { background: linear-gradient(45deg, #f44, #f0f); color: #fff; }
+        .btn-clear { background: #333; color: #fff; }
 
-        .btn-power:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .status { padding: 8px; text-align: center; font-size: 0.7rem; margin: 8px; border-radius: 8px; }
+        @media (min-width: 768px) { .status { padding: 12px; font-size: 0.8rem; margin: 10px; } }
 
-        .btn-reset {
-            background: linear-gradient(45deg, #f44, #f0f);
-            color: #fff;
-        }
-
-        .btn-clear {
-            background: #333;
-            color: #fff;
-        }
-
-        .status {
-            padding: 12px;
-            text-align: center;
-            font-size: 0.8rem;
-            margin: 10px;
-            border-radius: 8px;
-        }
-
-        .status-success {
-            background: #0f03;
-            border: 1px solid #0f0;
-            color: #0f0;
-        }
-
-        .status-error {
-            background: #f003;
-            border: 1px solid #f00;
-            color: #f88;
-        }
+        .status-success { background: #0f03; border: 1px solid #0f0; color: #0f0; }
+        .status-error { background: #f003; border: 1px solid #f00; color: #f88; }
 
         .attempts {
-            padding: 10px;
-            text-align: center;
-            font-size: 1rem;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #000000aa;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
             font-weight: bold;
             color: #ff44dd;
+            z-index: 20;
         }
-
-        #threeCanvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+        @media (min-width: 768px) { .attempts { top: 15px; right: 15px; padding: 8px 15px; font-size: 1rem; } }
 
         .instruction {
             position: absolute;
-            bottom: 15px;
-            left: 15px;
+            bottom: 10px;
+            left: 10px;
             background: #000000aa;
-            padding: 8px 12px;
+            padding: 5px 8px;
             border-radius: 8px;
-            font-size: 0.7rem;
+            font-size: 0.55rem;
             color: #aaa;
             z-index: 20;
             pointer-events: none;
         }
+        @media (min-width: 768px) { .instruction { bottom: 15px; left: 15px; padding: 8px 12px; font-size: 0.7rem; } }
 
         .power-led {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 15px;
-            height: 15px;
+            top: 10px;
+            right: 80px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: #f00;
-            box-shadow: 0 0 10px #f00;
+            box-shadow: 0 0 8px #f00;
             z-index: 20;
         }
+        @media (min-width: 768px) { .power-led { top: 15px; right: 100px; width: 15px; height: 15px; } }
 
-        .power-led.green {
-            background: #0f0;
-            box-shadow: 0 0 10px #0f0;
-        }
+        .power-led.green { background: #0f0; box-shadow: 0 0 10px #0f0; }
 
-        .admin-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .admin-modal-content {
-            background: #1a1a2e;
-            border: 2px solid #ff44dd;
-            border-radius: 20px;
-            padding: 30px;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0 0 50px #ff44dd;
-        }
-
-        .admin-modal-content input {
-            width: 100%;
-            padding: 12px;
-            margin: 20px 0;
-            background: #2a2a4a;
-            border: 1px solid #ff44dd;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            text-align: center;
-        }
-
-        .admin-modal-content button {
-            padding: 10px 30px;
-            background: #ff44dd;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            margin: 5px;
-        }
-
-        /* ЛИТЕРАТУРА */
         .literature-panel {
             background: #0a0a1a;
             border-top: 2px solid #ff44dd;
-            padding: 15px;
-            max-height: 250px;
+            padding: 10px;
+            max-height: 200px;
             overflow-y: auto;
         }
+        @media (min-width: 768px) { .literature-panel { padding: 15px; max-height: 250px; } }
 
-        .literature-title {
-            color: #ff44dd;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .literature-title { color: #ff44dd; font-size: 0.8rem; margin-bottom: 10px; }
+        @media (min-width: 768px) { .literature-title { font-size: 1rem; } }
 
-        .literature-content {
-            font-size: 0.8rem;
-            line-height: 1.5;
-            color: #ccc;
-        }
+        .literature-content { font-size: 0.65rem; line-height: 1.4; color: #ccc; }
+        @media (min-width: 768px) { .literature-content { font-size: 0.8rem; } }
 
-        .literature-section {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255, 68, 221, 0.05);
-            border-left: 3px solid #ff44dd;
-            border-radius: 5px;
-        }
+        .literature-section { margin-bottom: 10px; padding: 8px; background: rgba(255, 68, 221, 0.05); border-left: 3px solid #ff44dd; border-radius: 5px; }
+        .literature-section h4 { color: #0ff; font-size: 0.7rem; margin-bottom: 5px; }
+        @media (min-width: 768px) { .literature-section h4 { font-size: 0.85rem; } }
+        .literature-section ul { margin-left: 15px; }
+        .literature-section li { margin: 3px 0; }
+        .literature-section code { background: #1a1a2e; padding: 1px 4px; border-radius: 4px; color: #ff44dd; font-family: monospace; font-size: 0.6rem; }
 
-        .literature-section h4 {
-            color: #0ff;
-            margin-bottom: 8px;
+        .close-panel {
+            background: #ff44dd33;
+            border: 1px solid #ff44dd;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.65rem;
+            cursor: pointer;
         }
+        @media (min-width: 1024px) { .close-panel { display: none; } }
 
-        .literature-section ul {
-            margin-left: 20px;
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 95;
+            display: none;
         }
+        .overlay.active { display: block; }
 
-        .literature-section li {
-            margin: 5px 0;
-        }
-
-        .literature-section code {
-            background: #1a1a2e;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #ff44dd;
-            font-family: monospace;
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a1a2e;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #0ff;
-            border-radius: 3px;
-        }
+        #threeCanvas { width: 100%; height: 100%; display: block; }
+        .arrow-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; }
     </style>
 </head>
 <body>
@@ -772,27 +596,14 @@
             <div class="main-title">СХЕМНЫЙ ЦЕХ</div>
             <div class="main-subtitle">3D конструктор ПК с проводами и пинами</div>
             <div class="main-description">
-                Создайте уникальную сборку ПК из более чем 300 комплектующих!<br>
-                Выбирайте процессоры, видеокарты, память и другие компоненты,<br>
-                размещайте их в 3D-пространстве и подключайте пины для проверки работоспособности.
+                Собери свой ПК из 300+ комплектующих!<br>
+                Размещай компоненты в 3D и подключай пины по правильной схеме.
             </div>
             <div class="main-features">
-                <div class="feature">
-                    <div class="feature-icon">🎮</div>
-                    <div class="feature-text">300+ компонентов</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🖱️</div>
-                    <div class="feature-text">3D перемещение</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔌</div>
-                    <div class="feature-text">Подключение пинов</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">✅</div>
-                    <div class="feature-text">Проверка совместимости</div>
-                </div>
+                <div class="feature"><div class="feature-icon">🎮</div><div class="feature-text">300+ деталей</div></div>
+                <div class="feature"><div class="feature-icon">🖱️</div><div class="feature-text">3D перемещение</div></div>
+                <div class="feature"><div class="feature-icon">🔌</div><div class="feature-text">Подключение пинов</div></div>
+                <div class="feature"><div class="feature-icon">✅</div><div class="feature-text">Проверка питания</div></div>
             </div>
             <button class="start-btn" onclick="window.startBuilder()">▶ НАЧАТЬ СБОРКУ</button>
         </div>
@@ -800,128 +611,103 @@
 
     <!-- ОСНОВНОЙ КОНСТРУКТОР -->
     <div class="app-container" id="appContainer">
-        <div class="catalog-panel">
+        <!-- Мобильный хедер -->
+        <div class="mobile-header">
+            <div class="mobile-title">СХЕМНЫЙ ЦЕХ</div>
+            <div class="mobile-menu-btn" onclick="toggleCatalog()">📋 КАТАЛОГ</div>
+        </div>
+
+        <!-- Каталог -->
+        <div class="catalog-panel" id="catalogPanel">
             <div class="panel-header">
                 📦 КАТАЛОГ (300+)
                 <div class="admin-badge" id="adminBadge">👑 АДМИН</div>
             </div>
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск по комплектующим...">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск...">
             </div>
             <div class="categories" id="categories"></div>
             <div class="components-grid" id="componentsGrid"></div>
             <div class="installed-list">
-                <div style="color:#0ff; margin-bottom:8px;">✅ УСТАНОВЛЕНО:</div>
+                <div style="color:#0ff; margin-bottom:5px;">✅ УСТАНОВЛЕНО:</div>
                 <div id="installedList"></div>
             </div>
             <div class="preset-builds" id="presetBuilds" style="display: none;">
                 <div class="preset-title">
-                    🎮 ГОТОВЫЕ СБОРКИ (АДМИН)
+                    🎮 ГОТОВЫЕ СБОРКИ
                     <div class="exit-admin-btn" id="exitAdminBtn">🚪 ВЫЙТИ</div>
                 </div>
                 <div class="preset-buttons" id="presetButtons"></div>
             </div>
+            <div class="close-panel" onclick="closeCatalog()" style="margin: 10px; text-align: center;">✖ ЗАКРЫТЬ</div>
         </div>
 
+        <!-- 3D вид -->
         <div class="viewer-panel">
             <canvas id="threeCanvas"></canvas>
-            <canvas id="wire3dCanvas" class="arrow-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20;"></canvas>
+            <canvas id="arrowCanvas" class="arrow-canvas"></canvas>
             <div class="power-led" id="powerLed"></div>
             <div class="instruction">
-                🖱️ ЛКМ + drag = вращение | ПКМ + drag = панорама | 🖱️ по компоненту = перетащить
+                🖱️ ЛКМ вращение | 🖱️ по компоненту = перетащить
             </div>
             <div class="attempts" id="attemptsText">ПОПЫТОК: 5</div>
         </div>
 
-        <div class="pins-panel">
-            <div class="panel-header">🔌 ПИНЫ (нажмите два пина для соединения)</div>
+        <!-- Панель пинов -->
+        <div class="pins-panel" id="pinsPanel">
+            <div class="panel-header">
+                🔌 ПИНЫ
+                <div class="mobile-menu-btn" onclick="togglePins()">✖</div>
+            </div>
             <div class="pins-container" id="pinsContainer"></div>
             
             <div class="connections-table">
-                <div class="connections-title">
-                    🔗 ТАБЛИЦА ПОДКЛЮЧЕНИЙ
-                    <span style="font-size:0.7rem;">(какие пины с чем соединены)</span>
-                </div>
-                <div class="connections-list" id="connectionsList">
-                    <div class="no-connections">Нет подключений</div>
-                </div>
+                <div class="connections-title" style="color:#0ff; font-size:0.8rem;">🔗 ТАБЛИЦА ПОДКЛЮЧЕНИЙ</div>
+                <div class="connections-list" id="connectionsList"><div class="no-connections">Нет подключений</div></div>
             </div>
             
             <div class="controls">
                 <button class="btn btn-power" id="powerBtn" disabled>⚡ ВКЛЮЧИТЬ</button>
-                <button class="btn btn-reset" id="resetBtn">🔄 СБРОС ВСЕЙ СБОРКИ</button>
-                <button class="btn btn-clear" id="clearWiresBtn">❌ ОЧИСТИТЬ ПРОВОДА</button>
+                <button class="btn btn-reset" id="resetBtn">🔄 СБРОС</button>
+                <button class="btn btn-clear" id="clearWiresBtn">❌ ОЧИСТИТЬ</button>
             </div>
             <div id="statusMsg" class="status"></div>
             
-            <!-- ЛИТЕРАТУРА ПО ПОДКЛЮЧЕНИЮ ПИНОВ -->
             <div class="literature-panel">
-                <div class="literature-title">
-                    📚 ЛИТЕРАТУРА: ПРАВИЛА ПОДКЛЮЧЕНИЯ ПИНОВ
-                </div>
+                <div class="literature-title">📚 ПРАВИЛА ПОДКЛЮЧЕНИЯ ПИНОВ</div>
                 <div class="literature-content">
                     <div class="literature-section">
                         <h4>⚡ ОСНОВНЫЕ ПРАВИЛА</h4>
                         <ul>
-                            <li><code>VCC</code> / <code>VDD</code> — питание (обычно 3.3V, 5V или 12V). Подключается к соответствующей линии питания БП.</li>
-                            <li><code>GND</code> — земля. Должен быть соединён с общим проводом БП.</li>
-                            <li><code>12V_PCIE</code> — питание видеокарты. Требует подключения к <code>12V_RAIL</code> БП.</li>
-                            <li><code>ATX_24PIN</code> — основной разъём питания материнской платы (24 контакта).</li>
-                            <li><code>EPS_12V_8PIN</code> — дополнительное питание CPU (8 контактов, 12V).</li>
+                            <li><code>VCC/VDD</code> — питание. Подключается к <code>12V/5V/3.3V</code> БП</li>
+                            <li><code>GND</code> — земля. Соединяется с общим проводом</li>
+                            <li><code>12V_PCIE</code> — питание видеокарты → <code>12V_RAIL</code></li>
+                            <li><code>ATX_24PIN/EPS_12V</code> — питание материнской платы</li>
                         </ul>
                     </div>
-                    
                     <div class="literature-section">
-                        <h4>🔌 СТАНДАРТНЫЕ СОЕДИНЕНИЯ</h4>
+                        <h4>🔌 ПРАВИЛЬНЫЕ СОЕДИНЕНИЯ</h4>
                         <ul>
-                            <li><strong>PSU → Материнская плата:</strong> <code>ATX_24PIN</code> (питание) и <code>EPS_12V_8PIN</code> (CPU)</li>
-                            <li><strong>PSU → CPU:</strong> <code>12V_RAIL1/2</code> → <code>VCC_CORE</code> и <code>VTT</code></li>
-                            <li><strong>PSU → GPU:</strong> <code>12V_RAIL2</code> → <code>12V_PCIE</code></li>
-                            <li><strong>PSU → RAM:</strong> <code>3.3V_RAIL</code> → <code>VDD</code> и <code>VDDQ</code></li>
-                            <li><strong>PSU → SSD/HDD:</strong> <code>5V_RAIL</code> → <code>5V_SATA</code>, <code>12V_RAIL</code> → <code>12V</code></li>
-                            <li><strong>PSU → Кулер:</strong> <code>12V_RAIL1</code> → <code>12V_FAN</code>, <code>PWM</code> для управления скоростью</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="literature-section">
-                        <h4>⚠️ ЧЕГО НЕЛЬЗЯ ДЕЛАТЬ</h4>
-                        <ul>
-                            <li>❌ Подключать 12V к контактам, рассчитанным на 3.3V или 5V — сожжёте компонент!</li>
-                            <li>❌ Соединять <code>VCC</code> и <code>GND</code> напрямую — короткое замыкание!</li>
-                            <li>❌ Оставлять незаземлённые компоненты — возможны помехи и нестабильность.</li>
-                            <li>❌ Подключать питание к сигнальным пинам (<code>PWM</code>, <code>TACH</code>, <code>USB</code>).</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="literature-section">
-                        <h4>🔧 ПРИМЕР ПРАВИЛЬНОЙ СБОРКИ</h4>
-                        <ul>
-                            <li><strong>Бюджетная сборка:</strong> PSU.12V_RAIL1 → CPU.VCC_CORE, PSU.12V_RAIL2 → GPU.12V_PCIE</li>
-                            <li><strong>High-end сборка:</strong> дополнительно PSU.12V_RAIL1 → Motherboard.EPS_12V_8PIN</li>
-                            <li><strong>Серверная сборка:</strong> несколько линий 12V на CPU и GPU, отдельные линии для накопителей</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="literature-section">
-                        <h4>📖 РЕКОМЕНДУЕМАЯ ЛИТЕРАТУРА</h4>
-                        <ul>
-                            <li>«ATX Specification v2.2» — официальная спецификация питания ПК</li>
-                            <li>«Схемотехника ЭВМ» — Питер Абель, глава 5 «Системы питания»</li>
-                            <li>«PC Hardware: A Beginner's Guide» — Ron Gilster (главы 3-4 о подключениях)</li>
+                            <li>🔋 <span style="color:#0f0;">12V → 12V</span> (PSU.12V → CPU/GPU/Motherboard)</li>
+                            <li>🔋 <span style="color:#0f0;">5V → 5V</span> (PSU.5V → SSD/HDD)</li>
+                            <li>🔋 <span style="color:#0f0;">3.3V → 3.3V</span> (PSU.3.3V → RAM)</li>
+                            <li>⚫ <span style="color:#0f0;">GND → GND</span> (земля к земле)</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
     </div>
 
     <div class="admin-modal" id="adminModal">
-        <div class="admin-modal-content">
-            <h2 style="color:#ff44dd;">👑 РЕЖИМ АДМИНИСТРАТОРА</h2>
-            <input type="password" id="adminPassword" placeholder="Введите пароль" autocomplete="off">
+        <div class="admin-modal-content" style="background:#1a1a2e; border:2px solid #ff44dd; border-radius:20px; padding:25px; width:85%; max-width:350px; text-align:center;">
+            <h2 style="color:#ff44dd;">👑 АДМИН</h2>
+            <input type="password" id="adminPassword" placeholder="Пароль 1111" style="width:100%; padding:10px; margin:15px 0; background:#2a2a4a; border:1px solid #ff44dd; border-radius:8px; color:#fff;">
             <div>
-                <button onclick="window.checkAdminPassword()">ВОЙТИ</button>
-                <button onclick="window.closeAdminModal()">ОТМЕНА</button>
+                <button onclick="window.checkAdminPassword()" style="padding:8px 20px; background:#ff44dd; border:none; border-radius:8px; margin:5px;">ВОЙТИ</button>
+                <button onclick="window.closeAdminModal()" style="padding:8px 20px; background:#333; border:none; border-radius:8px;">ОТМЕНА</button>
             </div>
         </div>
     </div>
@@ -940,45 +726,36 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { DragControls } from 'three/addons/controls/DragControls.js';
 
-        // ==================== КАТАЛОГ КОМПЛЕКТУЮЩИХ (СОКРАЩЕННЫЙ ДЛЯ ПРИМЕРА) ====================
+        // ==================== КАТАЛОГ КОМПЛЕКТУЮЩИХ ====================
         const componentsDB = [];
 
-        const intelCPUs = ['Core i7-4790K', 'Core i5-4460', 'Core i7-6700K', 'Core i5-6500'];
-        const amdCPUs = ['FX-8350', 'Ryzen 7 1800X', 'Ryzen 5 1600'];
-        const nvidiaGPUs = ['GTX 1080 Ti', 'GTX 1080', 'GTX 1070', 'RTX 2080 Ti', 'RTX 2080 Super'];
-        const amdGPUs = ['RX 580', 'RX 570', 'RX 480'];
-        const rams = ['Corsair Vengeance 16GB DDR4', 'Kingston HyperX 16GB DDR4'];
-        const ssds = ['Samsung 980 Pro 500GB', 'Samsung 980 Pro 1TB'];
-        const hdds = ['Seagate BarraCuda 1TB', 'WD Blue 1TB'];
-        const motherboards = ['B660', 'Z690', 'Z790'];
-        const psus = ['Corsair CX550', 'Corsair RM750x', 'Corsair RM850x'];
-        const cases = ['NZXT H510', 'Corsair 4000D'];
-        const coolers = ['Cooler Master Hyper 212', 'Noctua NH-D15'];
+        const intelCPUs = ['Core i7-4790K', 'Core i5-4460', 'Core i7-6700K', 'Core i5-6500', 'Core i7-7700K', 'Core i5-7600K', 'Core i7-8700K', 'Core i5-8400', 'Core i9-9900K', 'Core i7-9700K', 'Core i9-10900K', 'Core i7-10700K', 'Core i9-11900K', 'Core i7-11700K', 'Core i9-12900K', 'Core i7-12700K', 'Core i5-12400F', 'Core i9-13900K', 'Core i7-13700K', 'Core i9-14900K'];
+        const amdCPUs = ['FX-8350', 'Ryzen 7 1800X', 'Ryzen 5 1600', 'Ryzen 7 2700X', 'Ryzen 5 2600', 'Ryzen 9 3900X', 'Ryzen 7 3700X', 'Ryzen 5 3600', 'Ryzen 9 5950X', 'Ryzen 7 5800X3D', 'Ryzen 5 5600X', 'Ryzen 9 7950X', 'Ryzen 7 7800X3D', 'Ryzen 5 7600X', 'Ryzen 9 9950X'];
+        const nvidiaGPUs = ['GTX 1080 Ti', 'GTX 1080', 'GTX 1070', 'RTX 2080 Ti', 'RTX 2080 Super', 'RTX 2070 Super', 'RTX 3090', 'RTX 3080', 'RTX 3070', 'RTX 3060 Ti', 'RTX 3060', 'RTX 4090', 'RTX 4080', 'RTX 4070 Ti', 'RTX 4070', 'RTX 4060 Ti', 'RTX 5090'];
+        const amdGPUs = ['RX 580', 'RX 570', 'RX 480', 'RX 5700 XT', 'RX 5700', 'RX 6900 XT', 'RX 6800 XT', 'RX 6700 XT', 'RX 7900 XTX', 'RX 7900 XT'];
+        const rams = ['Corsair Vengeance 16GB DDR4', 'Kingston HyperX 16GB DDR4', 'G.Skill Trident 32GB DDR4', 'Corsair Vengeance 32GB DDR5', 'G.Skill Trident Z5 64GB DDR5'];
+        const ssds = ['Samsung 980 Pro 500GB', 'Samsung 980 Pro 1TB', 'Samsung 990 Pro 1TB', 'Samsung 990 Pro 2TB', 'WD Black SN850 1TB'];
+        const hdds = ['Seagate BarraCuda 1TB', 'WD Blue 1TB', 'WD Black 2TB'];
+        const motherboards = ['B660', 'Z690', 'Z790', 'B650', 'X670E'];
+        const psus = ['Corsair CX550', 'Corsair RM750x', 'Corsair RM850x', 'Corsair RM1000x', 'Seasonic Focus 750W'];
+        const cases = ['NZXT H510', 'Corsair 4000D', 'Fractal Design Meshify C', 'Lian Li O11 Dynamic'];
+        const coolers = ['Cooler Master Hyper 212', 'Noctua NH-D15', 'Arctic Liquid Freezer II 360', 'Corsair H150i'];
 
-        // Функция для определения вольтажа пина по названию
         function getPinVoltage(pinName) {
             if (pinName.includes('12V') || pinName === 'VCC_CORE') return 12;
             if (pinName.includes('5V') || pinName === 'VDD' || pinName === 'VDDQ') return 5;
             if (pinName.includes('3.3V') || pinName === 'VCCSA' || pinName === 'VTT') return 3.3;
-            if (pinName.includes('PWM') || pinName === 'TACH') return 5;
+            if (pinName === 'GND') return 0;
             return null;
         }
 
-        // Функция проверки совместимости пинов
         function isPinCompatible(pin1, pin2) {
-            const voltage1 = getPinVoltage(pin1.name);
-            const voltage2 = getPinVoltage(pin2.name);
-            
-            // Если оба пина имеют напряжение, они должны быть одинаковыми
-            if (voltage1 !== null && voltage2 !== null) {
-                return voltage1 === voltage2;
-            }
-            
-            // Если один из пинов - земля (GND)
-            if (pin1.name === 'GND' || pin2.name === 'GND') {
-                return true;
-            }
-            
+            const v1 = getPinVoltage(pin1.name);
+            const v2 = getPinVoltage(pin2.name);
+            if (v1 === 0 && v2 === 0) return true;
+            if (v1 === 0 && v2 !== null) return true;
+            if (v2 === 0 && v1 !== null) return true;
+            if (v1 !== null && v2 !== null && v1 === v2) return true;
             return false;
         }
 
@@ -1019,252 +796,113 @@
         addToDB(cases, 'case', 'ATX', 0);
         addToDB(coolers, 'cooler', 'CPU', 150);
 
-        // Готовые сборки
+        // 6 ГОТОВЫХ СБОРОК ДЛЯ АДМИНА
         const presetBuilds = [
-            {
-                name: '💎 БЮДЖЕТНАЯ ИГРОВАЯ',
-                specs: {
-                    cpu: componentsDB.find(c => c.name.includes('12400F'))?.id,
-                    gpu: componentsDB.find(c => c.name.includes('GTX 1080'))?.id,
-                    ram: componentsDB.find(c => c.name.includes('16GB DDR4'))?.id,
-                    motherboard: componentsDB.find(c => c.name.includes('B660'))?.id,
-                    psu: componentsDB.find(c => c.name.includes('CX550'))?.id,
-                    ssd: componentsDB.find(c => c.name.includes('980 Pro 500GB'))?.id,
-                    hdd: componentsDB.find(c => c.name.includes('BarraCuda 1TB'))?.id,
-                    cooler: componentsDB.find(c => c.name.includes('Hyper 212'))?.id,
-                    case: componentsDB.find(c => c.name.includes('H510'))?.id
-                },
-                wireConnections: [
-                    { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 },
-                    { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                    { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 },
-                    { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                    { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 },
-                    { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
-                    { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }
-                ]
-            },
-            {
-                name: '🔥 HIGH-END ФЛАГМАН',
-                specs: {
-                    cpu: componentsDB.find(c => c.name.includes('14900K'))?.id,
-                    gpu: componentsDB.find(c => c.name.includes('RTX 4090'))?.id,
-                    ram: componentsDB.find(c => c.name.includes('64GB DDR5'))?.id,
-                    motherboard: componentsDB.find(c => c.name.includes('Z790'))?.id,
-                    psu: componentsDB.find(c => c.name.includes('RM1000x'))?.id,
-                    ssd: componentsDB.find(c => c.name.includes('990 Pro 2TB'))?.id,
-                    hdd: componentsDB.find(c => c.name.includes('Black 2TB'))?.id,
-                    cooler: componentsDB.find(c => c.name.includes('Liquid Freezer II 360'))?.id,
-                    case: componentsDB.find(c => c.name.includes('O11 Dynamic'))?.id
-                },
-                wireConnections: [
-                    { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 },
-                    { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                    { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 },
-                    { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                    { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 },
-                    { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
-                    { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }
-                ]
-            }
+            { name: '💎 БЮДЖЕТНАЯ ИГРОВАЯ', desc: 'i5-12400F + RTX 3060 + 16GB DDR4',
+              specs: { cpu: componentsDB.find(c => c.name.includes('12400F'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 3060'))?.id, ram: componentsDB.find(c => c.name.includes('16GB DDR4'))?.id, motherboard: componentsDB.find(c => c.name.includes('B660'))?.id, psu: componentsDB.find(c => c.name.includes('CX550'))?.id, ssd: componentsDB.find(c => c.name.includes('980 Pro 500GB'))?.id, hdd: componentsDB.find(c => c.name.includes('BarraCuda 1TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Hyper 212'))?.id, case: componentsDB.find(c => c.name.includes('H510'))?.id },
+              connections: [
+                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
+                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
+                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
+                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 2 }
+            ] },
+            { name: '🔥 HIGH-END ФЛАГМАН', desc: 'i9-14900K + RTX 4090 + 64GB DDR5',
+              specs: { cpu: componentsDB.find(c => c.name.includes('14900K'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 4090'))?.id, ram: componentsDB.find(c => c.name.includes('64GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('Z790'))?.id, psu: componentsDB.find(c => c.name.includes('RM1000x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 2TB'))?.id, hdd: componentsDB.find(c => c.name.includes('Black 2TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Liquid Freezer II 360'))?.id, case: componentsDB.find(c => c.name.includes('O11 Dynamic'))?.id },
+              connections: [
+                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
+                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
+                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
+                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 1 }
+            ] },
+            { name: '🎮 КИБЕРСПОРТИВНАЯ', desc: 'Ryzen 7 7800X3D + RTX 4070 Ti + 32GB DDR5',
+              specs: { cpu: componentsDB.find(c => c.name.includes('7800X3D'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 4070 Ti'))?.id, ram: componentsDB.find(c => c.name.includes('32GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('B650'))?.id, psu: componentsDB.find(c => c.name.includes('RM850x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 1TB'))?.id, hdd: null, cooler: componentsDB.find(c => c.name.includes('NH-D15'))?.id, case: componentsDB.find(c => c.name.includes('4000D'))?.id },
+              connections: [
+                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
+                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
+                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }
+            ] },
+            { name: '💼 РАБОЧАЯ СТАНЦИЯ', desc: 'Ryzen 9 7950X + RTX 4080 + 64GB DDR5',
+              specs: { cpu: componentsDB.find(c => c.name.includes('7950X'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 4080'))?.id, ram: componentsDB.find(c => c.name.includes('64GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('X670E'))?.id, psu: componentsDB.find(c => c.name.includes('RM1000x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 2TB'))?.id, hdd: componentsDB.find(c => c.name.includes('Black 2TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Liquid Freezer II 360'))?.id, case: componentsDB.find(c => c.name.includes('Define 7'))?.id },
+              connections: [
+                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
+                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
+                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
+                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 1 }
+            ] },
+            { name: '🎯 МИНИ-ИТХ СБОРКА', desc: 'Ryzen 7 8700G + компактный корпус',
+              specs: { cpu: componentsDB.find(c => c.name.includes('8700G'))?.id, gpu: null, ram: componentsDB.find(c => c.name.includes('16GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('B650'))?.id, psu: componentsDB.find(c => c.name.includes('SF750'))?.id, ssd: componentsDB.find(c => c.name.includes('980 Pro 1TB'))?.id, hdd: null, cooler: componentsDB.find(c => c.name.includes('NH-L9i'))?.id, case: componentsDB.find(c => c.name.includes('H510'))?.id },
+              connections: [
+                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
+                { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 },
+                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }
+            ] },
+            { name: '💀 ЭКСТРИМ-ОВЕРКЛОКИНГ', desc: 'i9-14900K + RTX 5090 + 48GB DDR5-6600',
+              specs: { cpu: componentsDB.find(c => c.name.includes('14900K'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 5090'))?.id, ram: componentsDB.find(c => c.name.includes('48GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('Z790'))?.id, psu: componentsDB.find(c => c.name.includes('RM1200x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 4TB'))?.id, hdd: componentsDB.find(c => c.name.includes('Black 6TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Liquid Freezer III 420'))?.id, case: componentsDB.find(c => c.name.includes('Torrent'))?.id },
+              connections: [
+                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
+                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
+                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
+                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 1 },
+                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 1 }
+            ] }
         ];
 
         // Состояние
-        let systemState = {
-            cpu: null, gpu: null, ram: null, motherboard: null, psu: null,
-            ssd: null, hdd: null, cooler: null, case: null
-        };
-        
-        let attempts = 5;
-        let powerOn = false;
-        let pinsMap = {};
-        let selectedPin = null;
-        let adminMode = false;
-        let searchQuery = '';
-        let components3D = [];
-        let dragControls;
+        let systemState = { cpu: null, gpu: null, ram: null, motherboard: null, psu: null, ssd: null, hdd: null, cooler: null, case: null };
+        let attempts = 5, powerOn = false, pinsMap = {}, selectedPin = null, adminMode = false, searchQuery = '';
+        let components3D = [], dragControls;
         let scene, camera, renderer, controls;
         let mainScene, mainCamera, mainRenderer;
-        
         let wireLines3D = [];
 
-        // ==================== ГЛАВНЫЙ ЭКРАН 3D ====================
-        function initMain3D() {
-            const canvas = document.getElementById('mainThreeCanvas');
-            if (!canvas) return;
-            
-            mainScene = new THREE.Scene();
-            mainScene.background = new THREE.Color(0x0a0a1a);
-            
-            mainCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-            mainCamera.position.set(5, 3, 8);
-            mainCamera.lookAt(0, 0, 0);
-            
-            mainRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-            mainRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            
-            const ambientLight = new THREE.AmbientLight(0x404060);
-            mainScene.add(ambientLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-            dirLight.position.set(2, 5, 3);
-            mainScene.add(dirLight);
-            const fillLight = new THREE.PointLight(0xff44dd, 0.3);
-            fillLight.position.set(-2, 1, 4);
-            mainScene.add(fillLight);
-            
-            const group = new THREE.Group();
-            const colors = [0x44ddff, 0xff44dd, 0x88ff88];
-            for (let i = 0; i < 30; i++) {
-                const size = 0.2 + Math.random() * 0.3;
-                const geometry = new THREE.BoxGeometry(size, size, size);
-                const material = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)], emissive: 0x222222 });
-                const cube = new THREE.Mesh(geometry, material);
-                cube.position.set((Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 15 - 5);
-                cube.userData = { speed: 0.002 + Math.random() * 0.005 };
-                group.add(cube);
-            }
-            mainScene.add(group);
-            
-            const torusGeo = new THREE.TorusGeometry(1.2, 0.1, 64, 100);
-            const torusMat = new THREE.MeshStandardMaterial({ color: 0x44ddff, emissive: 0x44ddff, emissiveIntensity: 0.5 });
-            const torus = new THREE.Mesh(torusGeo, torusMat);
-            torus.rotation.x = Math.PI / 2;
-            mainScene.add(torus);
-            
-            const sphereGeo = new THREE.SphereGeometry(0.6, 32, 32);
-            const sphereMat = new THREE.MeshStandardMaterial({ color: 0xff44dd, emissive: 0xff44dd, emissiveIntensity: 0.3 });
-            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-            mainScene.add(sphere);
-            
-            function animateMain() {
-                requestAnimationFrame(animateMain);
-                torus.rotation.z += 0.01;
-                torus.rotation.x += 0.005;
-                sphere.rotation.y += 0.01;
-                sphere.rotation.x += 0.005;
-                group.children.forEach(cube => {
-                    cube.rotation.x += cube.userData.speed;
-                    cube.rotation.y += cube.userData.speed * 1.5;
-                });
-                mainRenderer.render(mainScene, mainCamera);
-            }
-            animateMain();
-            
-            window.addEventListener('resize', () => {
-                mainCamera.aspect = canvas.clientWidth / canvas.clientHeight;
-                mainCamera.updateProjectionMatrix();
-                mainRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            });
-        }
-
-        // ==================== ОСНОВНОЙ КОНСТРУКТОР ====================
-        window.startBuilder = function() {
-            const mainScreen = document.getElementById('mainScreen');
-            const appContainer = document.getElementById('appContainer');
-            
-            if (mainScreen && appContainer) {
-                mainScreen.classList.add('hide');
-                setTimeout(() => {
-                    mainScreen.style.display = 'none';
-                    appContainer.classList.add('visible');
-                }, 500);
-            }
+        // Мобильные функции
+        window.toggleCatalog = () => {
+            document.getElementById('catalogPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        };
+        window.closeCatalog = () => {
+            document.getElementById('catalogPanel').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+        };
+        window.togglePins = () => {
+            document.getElementById('pinsPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        };
+        window.closeAllPanels = () => {
+            document.getElementById('catalogPanel').classList.remove('open');
+            document.getElementById('pinsPanel').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
         };
 
-        function create3DWire(startComp, endComp, color = 0xff44dd) {
-            if (!startComp || !endComp) return null;
-            const startPos = startComp.position.clone();
-            const endPos = endComp.position.clone();
-            const midPoint = new THREE.Vector3(
-                (startPos.x + endPos.x) / 2,
-                (startPos.y + endPos.y) / 2 + 0.3,
-                (startPos.z + endPos.z) / 2
-            );
-            const curve = new THREE.QuadraticBezierCurve3(startPos, midPoint, endPos);
-            const geometry = new THREE.TubeGeometry(curve, 30, 0.03, 6, false);
-            const material = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.5 });
-            const tube = new THREE.Mesh(geometry, material);
-            return tube;
-        }
-        
-        function update3DWires() {
-            wireLines3D.forEach(wire => { if (wire && scene) scene.remove(wire); });
-            wireLines3D = [];
-            
-            const componentPositions = {};
-            components3D.forEach(comp => {
-                if (comp.material && comp.material.color) {
-                    const colorHex = comp.material.color.getHex();
-                    if (colorHex === 0x44ddff && !componentPositions.cpu) componentPositions.cpu = comp.position.clone();
-                    else if (colorHex === 0xff44dd) componentPositions.gpu = comp.position.clone();
-                    else if (colorHex === 0xffaa00) {
-                        if (!componentPositions.ssd) componentPositions.ssd = comp.position.clone();
-                        else componentPositions.hdd = comp.position.clone();
-                    }
-                    else if (colorHex === 0xff4444) componentPositions.psu = comp.position.clone();
-                }
-            });
-            
-            for (let pin1Id in pinsMap) {
-                pinsMap[pin1Id].connections.forEach(pin2Id => {
-                    if (pin1Id > pin2Id) return;
-                    const comp1 = pinsMap[pin1Id].component;
-                    const comp2 = pinsMap[pin2Id].component;
-                    if (componentPositions[comp1] && componentPositions[comp2]) {
-                        const wire = create3DWire({ position: componentPositions[comp1] }, { position: componentPositions[comp2] }, 0x44ddff);
-                        if (wire) { scene.add(wire); wireLines3D.push(wire); }
-                    }
-                });
-            }
-            
-            if (componentPositions.psu) {
-                if (componentPositions.motherboard) {
-                    const wire = create3DWire({ position: componentPositions.psu }, { position: componentPositions.motherboard }, 0xff44dd);
-                    if (wire) { scene.add(wire); wireLines3D.push(wire); }
-                }
-                if (componentPositions.cpu) {
-                    const wire = create3DWire({ position: componentPositions.psu }, { position: componentPositions.cpu }, 0xff44dd);
-                    if (wire) { scene.add(wire); wireLines3D.push(wire); }
-                }
-                if (componentPositions.gpu) {
-                    const wire = create3DWire({ position: componentPositions.psu }, { position: componentPositions.gpu }, 0xff44dd);
-                    if (wire) { scene.add(wire); wireLines3D.push(wire); }
-                }
-            }
-        }
+        // Основные функции
+        window.startBuilder = function() {
+            document.getElementById('mainScreen').classList.add('hide');
+            setTimeout(() => {
+                document.getElementById('mainScreen').style.display = 'none';
+                document.getElementById('appContainer').classList.add('visible');
+            }, 500);
+        };
 
         function loadCategories() {
             const cats = ['all', 'cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler', 'case'];
-            const container = document.getElementById('categories');
-            container.innerHTML = cats.map(cat => 
-                `<button class="cat-btn ${cat === 'all' ? 'active' : ''}" data-cat="${cat}">${cat.toUpperCase()}</button>`
+            document.getElementById('categories').innerHTML = cats.map(cat => 
+                `<button class="cat-btn ${cat === 'all' ? 'active' : ''}" data-cat="${cat}" onclick="filterCategory('${cat}')">${cat.toUpperCase()}</button>`
             ).join('');
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    filterComponents(btn.dataset.cat);
-                });
-            });
         }
-
-        function filterComponents(category) {
+        window.filterCategory = function(category) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
             const cards = document.querySelectorAll('.component-card');
             cards.forEach(card => {
-                const matchesCategory = category === 'all' || card.dataset.category === category;
+                const matches = category === 'all' || card.dataset.category === category;
                 const matchesSearch = searchQuery === '' || card.querySelector('.comp-name')?.innerText.toLowerCase().includes(searchQuery.toLowerCase());
-                if (matchesCategory && matchesSearch) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                card.classList.toggle('hidden', !(matches && matchesSearch));
             });
-        }
-
+        };
         function searchComponents() {
-            searchQuery = document.getElementById('searchInput').value;
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
             const activeCat = document.querySelector('.cat-btn.active')?.dataset.cat || 'all';
-            filterComponents(activeCat);
+            filterCategory(activeCat);
         }
 
         function loadComponentsUI() {
@@ -1279,25 +917,15 @@
                 if (comp.tdp && comp.tdp > 0) specs += `<span>⚡ ${comp.tdp}W</span>`;
                 if (comp.wattage && comp.wattage > 0) specs += `<span>⚡ ${comp.wattage}W</span>`;
                 if (comp.pins.length) specs += `<span>📌 ${comp.pins.length} пина</span>`;
-                
-                card.innerHTML = `
-                    <div class="comp-name">${comp.name}</div>
-                    <div class="comp-specs">${specs}</div>
-                    <button class="add-btn">➕ Установить</button>
-                `;
-                const btn = card.querySelector('.add-btn');
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    addComponent(comp.id);
-                };
+                card.innerHTML = `<div class="comp-name">${comp.name}</div><div class="comp-specs">${specs}</div><button class="add-btn">➕ Установить</button>`;
+                card.querySelector('.add-btn').onclick = (e) => { e.stopPropagation(); addComponent(comp.id); };
                 grid.appendChild(card);
             });
         }
 
         function updateInstalledList() {
-            const container = document.getElementById('installedList');
-            const categories = ['cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler', 'case'];
-            container.innerHTML = categories.map(cat => {
+            const cats = ['cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler', 'case'];
+            document.getElementById('installedList').innerHTML = cats.map(cat => {
                 const id = systemState[cat];
                 const comp = id ? componentsDB.find(c => c.id === id) : null;
                 return `<div class="installed-item"><span>${cat.toUpperCase()}:</span> <span>${comp ? comp.name : '—'}</span></div>`;
@@ -1313,108 +941,75 @@
             updatePinsPanel();
             updateConnectionsTable();
             checkCompatibility();
-            
-            document.querySelectorAll('.component-card').forEach(card => card.classList.remove('selected'));
-            const targetCard = Array.from(document.querySelectorAll('.component-card')).find(card => 
-                card.querySelector('.comp-name')?.innerText === comp.name
-            );
-            if (targetCard) targetCard.classList.add('selected');
+            document.querySelectorAll('.component-card').forEach(c => c.classList.remove('selected'));
+            const target = Array.from(document.querySelectorAll('.component-card')).find(c => c.querySelector('.comp-name')?.innerText === comp.name);
+            if (target) target.classList.add('selected');
+            closeCatalog();
         }
 
         function updateConnectionsTable() {
             const container = document.getElementById('connectionsList');
             const connections = [];
-            
-            for (let pin1Id in pinsMap) {
-                pinsMap[pin1Id].connections.forEach(pin2Id => {
-                    if (pin1Id > pin2Id) return;
-                    const comp1 = pinsMap[pin1Id].component;
-                    const comp2 = pinsMap[pin2Id].component;
-                    const pin1Name = pinsMap[pin1Id].name;
-                    const pin2Name = pinsMap[pin2Id].name;
-                    const comp1Name = componentsDB.find(c => systemState[comp1] === c.id)?.name || comp1;
-                    const comp2Name = componentsDB.find(c => systemState[comp2] === c.id)?.name || comp2;
-                    const isCorrect = isPinCompatible(pinsMap[pin1Id], pinsMap[pin2Id]);
-                    connections.push({
-                        from: comp1Name,
-                        fromPin: pin1Name,
-                        to: comp2Name,
-                        toPin: pin2Name,
-                        correct: isCorrect
-                    });
+            for (let p1 in pinsMap) {
+                pinsMap[p1].connections.forEach(p2 => {
+                    if (p1 > p2) return;
+                    const isCorrect = isPinCompatible(pinsMap[p1], pinsMap[p2]);
+                    connections.push({ from: pinsMap[p1].component, fromPin: pinsMap[p1].name, to: pinsMap[p2].component, toPin: pinsMap[p2].name, correct: isCorrect });
                 });
             }
-            
-            if (connections.length === 0) {
-                container.innerHTML = '<div class="no-connections">Нет подключений</div>';
-                return;
-            }
-            
-            container.innerHTML = connections.map(conn => `
+            if (connections.length === 0) { container.innerHTML = '<div class="no-connections">Нет подключений</div>'; return; }
+            container.innerHTML = connections.map(c => `
                 <div class="connection-item">
-                    <span class="connection-from">${conn.from}</span>
-                    <span class="connection-pins">${conn.fromPin}</span>
+                    <span class="connection-from">${c.from}</span>
+                    <span class="connection-pins">${c.fromPin}</span>
                     <span class="connection-arrow">→</span>
-                    <span class="connection-pins">${conn.toPin}</span>
-                    <span class="connection-to" style="${conn.correct ? 'color:#88ff88' : 'color:#ff8888'}">${conn.to}</span>
-                    ${conn.correct ? '<span style="color:#0f0; margin-left:8px;">✅</span>' : '<span style="color:#f00; margin-left:8px;">❌</span>'}
+                    <span class="connection-pins">${c.toPin}</span>
+                    <span class="connection-to" style="${c.correct ? 'color:#88ff88' : 'color:#ff8888'}">${c.to}</span>
+                    ${c.correct ? '<span style="color:#0f0;">✅</span>' : '<span style="color:#f00;">❌</span>'}
                 </div>
             `).join('');
         }
-        
-        function applyWireConnections(connections) {
+
+        function applyConnections(connections) {
             clearAllWires();
             connections.forEach(conn => {
-                let fromPinId = null, toPinId = null;
-                for (let pinId in pinsMap) {
-                    if (pinsMap[pinId].component === conn.from && pinsMap[pinId].index === conn.fromPin) fromPinId = pinId;
-                    if (pinsMap[pinId].component === conn.to && pinsMap[pinId].index === conn.toPin) toPinId = pinId;
+                let fromId = null, toId = null;
+                for (let pid in pinsMap) {
+                    if (pinsMap[pid].component === conn.from && pinsMap[pid].index === conn.fromPin) fromId = pid;
+                    if (pinsMap[pid].component === conn.to && pinsMap[pid].index === conn.toPin) toId = pid;
                 }
-                if (fromPinId && toPinId && !pinsMap[fromPinId].connections.includes(toPinId)) {
-                    pinsMap[fromPinId].connections.push(toPinId);
-                    pinsMap[toPinId].connections.push(fromPinId);
-                    pinsMap[fromPinId].connected = true;
-                    pinsMap[toPinId].connected = true;
-                    const el1 = document.getElementById(`pin-${fromPinId}`);
-                    const el2 = document.getElementById(`pin-${toPinId}`);
-                    if (el1) {
-                        const isCorrect = isPinCompatible(pinsMap[fromPinId], pinsMap[toPinId]);
-                        el1.classList.add(isCorrect ? 'correct' : 'wrong');
-                        el1.classList.remove('selected');
-                    }
-                    if (el2) {
-                        const isCorrect = isPinCompatible(pinsMap[fromPinId], pinsMap[toPinId]);
-                        el2.classList.add(isCorrect ? 'correct' : 'wrong');
-                        el2.classList.remove('selected');
-                    }
+                if (fromId && toId && !pinsMap[fromId].connections.includes(toId)) {
+                    pinsMap[fromId].connections.push(toId);
+                    pinsMap[toId].connections.push(fromId);
+                    pinsMap[fromId].connected = true;
+                    pinsMap[toId].connected = true;
+                    const el1 = document.getElementById(`pin-${fromId}`);
+                    const el2 = document.getElementById(`pin-${toId}`);
+                    const correct = isPinCompatible(pinsMap[fromId], pinsMap[toId]);
+                    if (el1) { el1.classList.add(correct ? 'correct' : 'wrong'); el1.classList.remove('selected'); }
+                    if (el2) { el2.classList.add(correct ? 'correct' : 'wrong'); el2.classList.remove('selected'); }
                 }
             });
             redrawWires();
             updateConnectionsTable();
-            update3DWires();
         }
 
-        function loadPresetBuild(preset) {
+        function loadPreset(preset) {
             for (let [cat, id] of Object.entries(preset.specs)) systemState[cat] = id || null;
             updateInstalledList();
             update3DScene();
             updatePinsPanel();
             checkCompatibility();
-            if (preset.wireConnections) setTimeout(() => {
-                applyWireConnections(preset.wireConnections);
-                update3DWires();
-            }, 100);
-            document.getElementById('statusMsg').innerHTML = `✅ Загружена сборка: ${preset.name} + подключены пины!`;
+            if (preset.connections) setTimeout(() => applyConnections(preset.connections), 150);
+            document.getElementById('statusMsg').innerHTML = `✅ Загружена: ${preset.name}`;
             document.getElementById('statusMsg').className = 'status status-success';
             setTimeout(() => { if (document.getElementById('statusMsg').innerHTML.includes('Загружена')) document.getElementById('statusMsg').innerHTML = ''; }, 3000);
         }
 
         function initPresetButtons() {
-            const container = document.getElementById('presetButtons');
-            container.innerHTML = presetBuilds.map((build, idx) => `<button class="preset-btn" onclick="window.loadPreset(${idx})">${build.name}</button>`).join('');
+            document.getElementById('presetButtons').innerHTML = presetBuilds.map((b, i) => `<button class="preset-btn" onclick="window.loadPresetByIndex(${i})">${b.name}<br><span style="font-size:0.6rem;">${b.desc}</span></button>`).join('');
         }
-
-        window.loadPreset = function(idx) { loadPresetBuild(presetBuilds[idx]); };
+        window.loadPresetByIndex = (i) => loadPreset(presetBuilds[i]);
 
         function exitAdminMode() {
             adminMode = false;
@@ -1423,25 +1018,24 @@
         }
 
         function checkCompatibility() {
-            let allGood = true;
+            let ok = true;
             const psuId = systemState.psu, cpuId = systemState.cpu, gpuId = systemState.gpu;
             if (psuId && (cpuId || gpuId)) {
                 const psu = componentsDB.find(c => c.id === psuId);
-                let totalTdp = 0;
-                if (cpuId) totalTdp += componentsDB.find(c => c.id === cpuId).tdp || 0;
-                if (gpuId) totalTdp += componentsDB.find(c => c.id === gpuId).tdp || 0;
-                totalTdp += 100;
-                const psuWatt = psu.wattage || 500;
-                if (totalTdp > psuWatt) allGood = false;
+                let total = 0;
+                if (cpuId) total += componentsDB.find(c => c.id === cpuId).tdp || 0;
+                if (gpuId) total += componentsDB.find(c => c.id === gpuId).tdp || 0;
+                total += 100;
+                if (total > (psu?.wattage || 500)) ok = false;
             }
-            const statusDiv = document.getElementById('statusMsg');
-            if (allGood && systemState.cpu && systemState.motherboard && systemState.psu) {
-                statusDiv.innerHTML = '✅ Совместимость OK';
-                statusDiv.className = 'status status-success';
+            const status = document.getElementById('statusMsg');
+            if (ok && systemState.cpu && systemState.motherboard && systemState.psu) {
+                status.innerHTML = '✅ Совместимость OK';
+                status.className = 'status status-success';
                 document.getElementById('powerBtn').disabled = false;
             } else {
-                statusDiv.innerHTML = '⚠️ Проверьте совместимость';
-                statusDiv.className = 'status status-error';
+                status.innerHTML = '⚠️ Проверьте совместимость (CPU/материнка, мощность БП)';
+                status.className = 'status status-error';
                 document.getElementById('powerBtn').disabled = true;
             }
         }
@@ -1450,11 +1044,11 @@
             const container = document.getElementById('pinsContainer');
             container.innerHTML = '';
             pinsMap = {};
-            const categories = ['cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler'];
-            categories.forEach(cat => {
-                const compId = systemState[cat];
-                if (!compId) return;
-                const comp = componentsDB.find(c => c.id === compId);
+            const cats = ['cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler'];
+            cats.forEach(cat => {
+                const id = systemState[cat];
+                if (!id) return;
+                const comp = componentsDB.find(c => c.id === id);
                 if (!comp || !comp.pins.length) return;
                 const section = document.createElement('div');
                 section.className = 'component-pins';
@@ -1477,62 +1071,41 @@
         }
 
         function selectPin(pinId) {
-            const pinElement = document.getElementById(`pin-${pinId}`);
+            const el = document.getElementById(`pin-${pinId}`);
             if (selectedPin === pinId) {
-                pinElement.classList.remove('selected');
+                el.classList.remove('selected');
                 selectedPin = null;
             } else {
                 if (selectedPin) document.getElementById(`pin-${selectedPin}`)?.classList.remove('selected');
-                pinElement.classList.add('selected');
+                el.classList.add('selected');
                 selectedPin = pinId;
             }
             if (selectedPin) {
-                const otherSelected = document.querySelector('.pin.selected');
-                if (otherSelected && otherSelected.id !== `pin-${selectedPin}`) {
-                    const otherId = otherSelected.id.replace('pin-', '');
-                    connectPins(selectedPin, otherId);
+                const other = document.querySelector('.pin.selected');
+                if (other && other.id !== `pin-${selectedPin}`) {
+                    connectPins(selectedPin, other.id.replace('pin-', ''));
                 }
             }
         }
 
-        function connectPins(pin1Id, pin2Id) {
-            if (pinsMap[pin1Id].connections.includes(pin2Id)) { 
-                alert('Уже соединено'); 
-                return; 
-            }
-            
-            const pin1 = pinsMap[pin1Id];
-            const pin2 = pinsMap[pin2Id];
-            const isCorrect = isPinCompatible(pin1, pin2);
-            
-            pinsMap[pin1Id].connections.push(pin2Id);
-            pinsMap[pin2Id].connections.push(pin1Id);
-            pinsMap[pin1Id].connected = true;
-            pinsMap[pin2Id].connected = true;
-            
-            const el1 = document.getElementById(`pin-${pin1Id}`);
-            const el2 = document.getElementById(`pin-${pin2Id}`);
-            if (el1) {
-                el1.classList.add(isCorrect ? 'correct' : 'wrong');
-                el1.classList.remove('selected');
-            }
-            if (el2) {
-                el2.classList.add(isCorrect ? 'correct' : 'wrong');
-                el2.classList.remove('selected');
-            }
-            
+        function connectPins(p1, p2) {
+            if (pinsMap[p1].connections.includes(p2)) { alert('Уже соединено'); return; }
+            const correct = isPinCompatible(pinsMap[p1], pinsMap[p2]);
+            pinsMap[p1].connections.push(p2);
+            pinsMap[p2].connections.push(p1);
+            pinsMap[p1].connected = true;
+            pinsMap[p2].connected = true;
+            const el1 = document.getElementById(`pin-${p1}`);
+            const el2 = document.getElementById(`pin-${p2}`);
+            if (el1) { el1.classList.add(correct ? 'correct' : 'wrong'); el1.classList.remove('selected'); }
+            if (el2) { el2.classList.add(correct ? 'correct' : 'wrong'); el2.classList.remove('selected'); }
             selectedPin = null;
             redrawWires();
             updateConnectionsTable();
-            update3DWires();
-            
-            if (!isCorrect) {
+            if (!correct) {
                 document.getElementById('statusMsg').innerHTML = '❌ НЕПРАВИЛЬНОЕ ПОДКЛЮЧЕНИЕ! Проверьте напряжение!';
                 document.getElementById('statusMsg').className = 'status status-error';
-                setTimeout(() => {
-                    if (document.getElementById('statusMsg').innerHTML === '❌ НЕПРАВИЛЬНОЕ ПОДКЛЮЧЕНИЕ! Проверьте напряжение!') 
-                        document.getElementById('statusMsg').innerHTML = '';
-                }, 2000);
+                setTimeout(() => { if (document.getElementById('statusMsg').innerHTML.includes('НЕПРАВИЛЬНОЕ')) document.getElementById('statusMsg').innerHTML = ''; }, 2000);
             }
         }
 
@@ -1543,46 +1116,38 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const container = document.querySelector('.pins-container');
             const rect = container.getBoundingClientRect();
-            for (let pin1Id in pinsMap) {
-                pinsMap[pin1Id].connections.forEach(pin2Id => {
-                    if (pin1Id > pin2Id) return;
-                    const el1 = document.getElementById(`pin-${pin1Id}`);
-                    const el2 = document.getElementById(`pin-${pin2Id}`);
+            for (let p1 in pinsMap) {
+                pinsMap[p1].connections.forEach(p2 => {
+                    if (p1 > p2) return;
+                    const el1 = document.getElementById(`pin-${p1}`);
+                    const el2 = document.getElementById(`pin-${p2}`);
                     if (!el1 || !el2) return;
-                    const r1 = el1.getBoundingClientRect();
-                    const r2 = el2.getBoundingClientRect();
-                    const x1 = r1.left + r1.width/2 - rect.left;
-                    const y1 = r1.top + r1.height/2 - rect.top;
-                    const x2 = r2.left + r2.width/2 - rect.left;
-                    const y2 = r2.top + r2.height/2 - rect.top;
+                    const r1 = el1.getBoundingClientRect(), r2 = el2.getBoundingClientRect();
+                    const x1 = r1.left + r1.width/2 - rect.left, y1 = r1.top + r1.height/2 - rect.top;
+                    const x2 = r2.left + r2.width/2 - rect.left, y2 = r2.top + r2.height/2 - rect.top;
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
                     ctx.lineTo(x2, y2);
-                    
-                    const isCorrect = isPinCompatible(pinsMap[pin1Id], pinsMap[pin2Id]);
-                    ctx.strokeStyle = isCorrect ? '#0f0' : '#f00';
+                    const correct = isPinCompatible(pinsMap[p1], pinsMap[p2]);
+                    ctx.strokeStyle = correct ? '#0f0' : '#f00';
                     ctx.lineWidth = 2;
                     ctx.shadowBlur = 5;
-                    ctx.shadowColor = isCorrect ? '#0f0' : '#f00';
+                    ctx.shadowColor = correct ? '#0f0' : '#f00';
                     ctx.stroke();
                 });
             }
         }
 
         function clearAllWires() {
-            for (let pinId in pinsMap) {
-                pinsMap[pinId].connections = [];
-                pinsMap[pinId].connected = false;
-                pinsMap[pinId].powered = false;
-                const el = document.getElementById(`pin-${pinId}`);
-                if (el) {
-                    el.classList.remove('connected', 'powered', 'correct', 'wrong', 'selected');
-                }
+            for (let pid in pinsMap) {
+                pinsMap[pid].connections = [];
+                pinsMap[pid].connected = false;
+                pinsMap[pid].powered = false;
+                document.getElementById(`pin-${pid}`)?.classList.remove('connected', 'powered', 'correct', 'wrong', 'selected');
             }
             const canvas = document.getElementById('wireCanvas');
             if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             updateConnectionsTable();
-            update3DWires();
         }
 
         function resetBuild() {
@@ -1605,17 +1170,13 @@
             }
             if (!powerOn) {
                 let allCorrect = true;
-                for (let pin1Id in pinsMap) {
-                    for (let pin2Id of pinsMap[pin1Id].connections) {
-                        if (pin1Id > pin2Id) continue;
-                        if (!isPinCompatible(pinsMap[pin1Id], pinsMap[pin2Id])) {
-                            allCorrect = false;
-                            break;
-                        }
+                for (let p1 in pinsMap) {
+                    for (let p2 of pinsMap[p1].connections) {
+                        if (p1 > p2) continue;
+                        if (!isPinCompatible(pinsMap[p1], pinsMap[p2])) { allCorrect = false; break; }
                     }
                     if (!allCorrect) break;
                 }
-                
                 if (!allCorrect) {
                     attempts--;
                     document.getElementById('attemptsText').innerHTML = `ПОПЫТОК: ${attempts}`;
@@ -1624,19 +1185,15 @@
                     if (attempts === 0) document.getElementById('statusMsg').innerHTML = '📢 ПИШИ ЗАЯВЛЕНИЕ НА ОТЧИСЛЕНИЕ!';
                     return;
                 }
-                
                 powerOn = true;
-                for (let pinId in pinsMap) if (pinsMap[pinId].connected) { 
-                    document.getElementById(`pin-${pinId}`)?.classList.add('powered'); 
-                    pinsMap[pinId].powered = true; 
-                }
+                for (let pid in pinsMap) if (pinsMap[pid].connected) { document.getElementById(`pin-${pid}`)?.classList.add('powered'); pinsMap[pid].powered = true; }
                 document.getElementById('powerLed').classList.add('green');
                 document.getElementById('statusMsg').innerHTML = '✅ СИСТЕМА РАБОТАЕТ! Все подключения правильные!';
                 document.getElementById('statusMsg').className = 'status status-success';
                 document.getElementById('powerBtn').disabled = true;
             } else {
                 powerOn = false;
-                for (let pinId in pinsMap) document.getElementById(`pin-${pinId}`)?.classList.remove('powered');
+                for (let pid in pinsMap) document.getElementById(`pin-${pid}`)?.classList.remove('powered');
                 document.getElementById('powerLed').classList.remove('green');
                 document.getElementById('statusMsg').innerHTML = 'Питание отключено';
             }
@@ -1655,21 +1212,19 @@
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.screenSpacePanning = true;
-            const ambientLight = new THREE.AmbientLight(0x404060);
-            scene.add(ambientLight);
+            const ambient = new THREE.AmbientLight(0x404060);
+            scene.add(ambient);
             const mainLight = new THREE.DirectionalLight(0xffffff, 1);
             mainLight.position.set(3, 5, 2);
             mainLight.castShadow = true;
             scene.add(mainLight);
-            const gridHelper = new THREE.GridHelper(10, 20, 0x44ddff, 0x336699);
-            gridHelper.position.y = -0.5;
-            scene.add(gridHelper);
+            const grid = new THREE.GridHelper(10, 20, 0x44ddff, 0x336699);
+            grid.position.y = -0.5;
+            scene.add(grid);
             createCase();
-            const moboGeo = new THREE.BoxGeometry(3.2, 0.1, 2.4);
-            const moboMat = new THREE.MeshStandardMaterial({ color: 0x1e4d2e });
-            const motherboard = new THREE.Mesh(moboGeo, moboMat);
-            motherboard.position.set(0, 0.05, 0);
-            scene.add(motherboard);
+            const mobo = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.1, 2.4), new THREE.MeshStandardMaterial({ color: 0x1e4d2e }));
+            mobo.position.set(0, 0.05, 0);
+            scene.add(mobo);
             animate();
             window.addEventListener('resize', () => {
                 camera.aspect = canvas.clientWidth / canvas.clientHeight;
@@ -1679,32 +1234,28 @@
         }
 
         function createCase() {
-            const caseGroup = new THREE.Group();
-            const floorGeo = new THREE.BoxGeometry(4.5, 0.1, 3.2);
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2a });
-            const floor = new THREE.Mesh(floorGeo, floorMat);
+            const group = new THREE.Group();
+            const floor = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.1, 3.2), new THREE.MeshStandardMaterial({ color: 0x1a1a2a }));
             floor.position.set(0, -0.4, 0);
-            caseGroup.add(floor);
-            const glassMat = new THREE.MeshStandardMaterial({ color: 0x2a2a3a, transparent: true, opacity: 0.2 });
-            const back = new THREE.Mesh(new THREE.BoxGeometry(4.5, 2.5, 0.1), glassMat);
+            group.add(floor);
+            const glass = new THREE.MeshStandardMaterial({ color: 0x2a2a3a, transparent: true, opacity: 0.2 });
+            const back = new THREE.Mesh(new THREE.BoxGeometry(4.5, 2.5, 0.1), glass);
             back.position.set(0, 0.8, -1.6);
-            caseGroup.add(back);
-            const left = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3.2), glassMat);
+            group.add(back);
+            const left = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3.2), glass);
             left.position.set(-2.3, 0.8, 0);
-            caseGroup.add(left);
-            const right = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3.2), glassMat);
+            group.add(left);
+            const right = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3.2), glass);
             right.position.set(2.3, 0.8, 0);
-            caseGroup.add(right);
-            const top = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.1, 3.2), glassMat);
+            group.add(right);
+            const top = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.1, 3.2), glass);
             top.position.set(0, 1.8, 0);
-            caseGroup.add(top);
-            scene.add(caseGroup);
+            group.add(top);
+            scene.add(group);
         }
 
-        function createComponentCube(color, size, pos, name) {
-            const geometry = new THREE.BoxGeometry(size.w, size.h, size.d);
-            const material = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.2 });
-            const cube = new THREE.Mesh(geometry, material);
+        function createCube(color, size, pos, name) {
+            const cube = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d), new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.2 }));
             cube.position.set(pos.x, pos.y, pos.z);
             cube.castShadow = true;
             const canvas = document.createElement('canvas');
@@ -1731,7 +1282,7 @@
 
         function update3DScene() {
             if (!scene) return;
-            components3D.forEach(comp => scene.remove(comp));
+            components3D.forEach(c => scene.remove(c));
             components3D = [];
             const colors = { cpu: 0x44ddff, gpu: 0xff44dd, ram: 0x44ddff, ssd: 0xffaa00, hdd: 0xffaa00, psu: 0xff4444, cooler: 0x44ddff };
             const sizes = { cpu: { w: 0.7, h: 0.3, d: 0.5 }, gpu: { w: 1.0, h: 0.6, d: 0.3 }, ram: { w: 0.5, h: 0.1, d: 0.15 }, ssd: { w: 0.7, h: 0.1, d: 0.5 }, hdd: { w: 0.9, h: 0.2, d: 0.7 }, psu: { w: 1.0, h: 0.3, d: 0.7 }, cooler: { w: 0.7, h: 0.7, d: 0.7 } };
@@ -1739,8 +1290,8 @@
             for (let [cat, id] of Object.entries(systemState)) {
                 if (id && sizes[cat]) {
                     const comp = componentsDB.find(c => c.id === id);
-                    const displayName = comp ? comp.name.split(' ').slice(0, 2).join(' ') : cat.toUpperCase();
-                    const cube = createComponentCube(colors[cat], sizes[cat], positions[cat] || { x: 0, y: 0, z: 0 }, displayName);
+                    const name = comp ? comp.name.split(' ').slice(0, 2).join(' ') : cat.toUpperCase();
+                    const cube = createCube(colors[cat], sizes[cat], positions[cat] || { x: 0, y: 0, z: 0 }, name);
                     scene.add(cube);
                     components3D.push(cube);
                 }
@@ -1749,7 +1300,6 @@
             dragControls = new DragControls(components3D, camera, renderer.domElement);
             dragControls.addEventListener('dragstart', () => { controls.enabled = false; });
             dragControls.addEventListener('dragend', () => { controls.enabled = true; });
-            setTimeout(() => update3DWires(), 100);
         }
 
         function animate() {
@@ -1776,22 +1326,13 @@
             resizeObserver.observe(container);
             canvas.width = container.clientWidth;
             canvas.height = container.clientHeight;
-            return canvas;
         }
 
-        // Админ режим
-        window.openAdminModal = function() {
-            document.getElementById('adminModal').style.display = 'flex';
-            document.getElementById('adminPassword').value = '';
-        };
-
-        window.closeAdminModal = function() {
-            document.getElementById('adminModal').style.display = 'none';
-        };
-
-        window.checkAdminPassword = function() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === '1111') {
+        // Админ
+        window.openAdminModal = () => { document.getElementById('adminModal').style.display = 'flex'; };
+        window.closeAdminModal = () => { document.getElementById('adminModal').style.display = 'none'; };
+        window.checkAdminPassword = () => {
+            if (document.getElementById('adminPassword').value === '1111') {
                 adminMode = true;
                 document.getElementById('adminBadge').classList.add('admin-mode-active');
                 document.getElementById('presetBuilds').style.display = 'block';
@@ -1804,7 +1345,40 @@
             } else { alert('Неверный пароль!'); }
         };
 
-        // Инициализация
+        function initMain3D() {
+            const canvas = document.getElementById('mainThreeCanvas');
+            if (!canvas) return;
+            mainScene = new THREE.Scene();
+            mainScene.background = new THREE.Color(0x0a0a1a);
+            mainCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            mainCamera.position.set(5, 3, 8);
+            mainRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            mainRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            const ambient = new THREE.AmbientLight(0x404060);
+            mainScene.add(ambient);
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(2, 5, 3);
+            mainScene.add(light);
+            const group = new THREE.Group();
+            for (let i = 0; i < 30; i++) {
+                const cube = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.25, 0.25), new THREE.MeshStandardMaterial({ color: 0x44ddff }));
+                cube.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 6, (Math.random() - 0.5) * 12 - 4);
+                cube.userData = { speed: 0.003 };
+                group.add(cube);
+            }
+            mainScene.add(group);
+            const torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.08, 32, 100), new THREE.MeshStandardMaterial({ color: 0xff44dd, emissive: 0xff44dd }));
+            torus.rotation.x = Math.PI / 2;
+            mainScene.add(torus);
+            function animateMain() {
+                requestAnimationFrame(animateMain);
+                torus.rotation.z += 0.01;
+                group.children.forEach(c => c.rotation.x += c.userData.speed);
+                mainRenderer.render(mainScene, mainCamera);
+            }
+            animateMain();
+        }
+
         function init() {
             initMain3D();
             loadCategories();
@@ -1820,10 +1394,8 @@
             setInterval(() => {
                 const canvas = document.getElementById('arrowCanvas');
                 if (canvas && canvas.width !== canvas.clientWidth) { canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; updateConnectionsTable(); }
-                update3DWires();
-            }, 1000);
+            }, 500);
         }
-        
         init();
     </script>
 </body>
