@@ -9,250 +9,150 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0a0a1a, #020210);
             color: #fff;
             overflow: hidden;
             touch-action: pan-x pan-y;
         }
 
-        /* ГЛАВНЫЙ ЭКРАН */
         .main-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a0a2a 0%, #0f0f2a 50%, #1a1a3a 100%);
+            background: radial-gradient(ellipse at 30% 40%, #0a0f2a, #02020e);
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            overflow: hidden;
         }
-
-        .main-screen.hide {
-            opacity: 0;
+        .main-screen.hide { opacity: 0; pointer-events: none; }
+        .cyber-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(45deg, #00ffff08 0px, #00ffff08 2px, transparent 2px, transparent 8px);
             pointer-events: none;
         }
-
+        .glow-orb {
+            position: absolute;
+            width: 60vmax;
+            height: 60vmax;
+            background: radial-gradient(circle, rgba(0,255,255,0.12) 0%, rgba(255,68,221,0) 70%);
+            border-radius: 50%;
+            top: -20%;
+            right: -20%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
         .main-content {
             text-align: center;
-            max-width: 90%;
-            padding: 30px 20px;
-            background: rgba(10, 10, 30, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            border: 2px solid #00ffff66;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
-            animation: fadeInUp 0.8s ease;
+            max-width: 900px;
+            width: 90%;
+            padding: 30px 24px;
+            background: rgba(5, 5, 20, 0.65);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            border: 1px solid rgba(0, 255, 255, 0.6);
+            box-shadow: 0 0 80px rgba(0, 255, 255, 0.25);
+            animation: fadeInUp 0.8s ease-out;
+            z-index: 2;
         }
-
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(40px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .main-title {
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, #ff44dd, #44ddff);
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD966, #FF44DD, #44DDFF);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
             font-family: 'Orbitron', monospace;
         }
-
-        @media (min-width: 768px) {
-            .main-title { font-size: 4rem; }
-            .main-content { padding: 40px; max-width: 800px; }
-        }
-
-        .main-subtitle {
-            font-size: 1rem;
-            color: #88aaff;
-            margin-bottom: 20px;
-        }
-        @media (min-width: 768px) { .main-subtitle { font-size: 1.2rem; } }
-
-        .main-description {
-            font-size: 0.85rem;
-            color: #ccc;
-            line-height: 1.5;
-            margin-bottom: 30px;
-            padding: 0 10px;
-        }
-        @media (min-width: 768px) { .main-description { font-size: 1rem; } }
-
-        .main-features {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
+        .main-subtitle { font-size: 1.2rem; color: #aaf0ff; margin-bottom: 25px; }
+        .main-description { font-size: 1rem; color: #ccddf8; line-height: 1.5; margin-bottom: 35px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .main-features { display: flex; justify-content: center; gap: 25px; margin-bottom: 45px; flex-wrap: wrap; }
         .feature {
-            background: rgba(0, 255, 255, 0.1);
+            background: rgba(0, 255, 255, 0.08);
             border: 1px solid #0ff;
-            border-radius: 12px;
-            padding: 10px 15px;
-            min-width: 100px;
+            border-radius: 28px;
+            padding: 12px 24px;
+            min-width: 130px;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
         }
-        @media (min-width: 768px) { .feature { padding: 15px 25px; min-width: 150px; } }
-
-        .feature-icon { font-size: 1.5rem; margin-bottom: 5px; }
-        @media (min-width: 768px) { .feature-icon { font-size: 2rem; } }
-
-        .feature-text { font-size: 0.7rem; color: #0ff; }
-        @media (min-width: 768px) { .feature-text { font-size: 0.9rem; } }
-
+        .feature:hover { transform: translateY(-5px); background: #0ff1; }
+        .feature-icon { font-size: 2rem; margin-bottom: 8px; }
+        .feature-text { font-size: 0.9rem; font-weight: 500; color: #0ff; }
         .start-btn {
-            background: linear-gradient(45deg, #ff44dd, #44ddff);
+            background: linear-gradient(95deg, #ff44dd, #44ddff);
             border: none;
-            padding: 12px 30px;
-            font-size: 1.2rem;
+            padding: 14px 48px;
+            font-size: 1.3rem;
             font-weight: bold;
-            color: #000;
-            border-radius: 50px;
+            color: #010118;
+            border-radius: 60px;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 0 20px rgba(68, 221, 255, 0.5);
+            letter-spacing: 3px;
+            box-shadow: 0 0 25px rgba(68, 221, 255, 0.6);
+            font-family: 'Orbitron', monospace;
         }
-        @media (min-width: 768px) { .start-btn { padding: 15px 50px; font-size: 1.5rem; } }
+        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 45px #ff44dd; }
 
-        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 68, 221, 0.8); }
-
-        .main-3d-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.3;
-        }
-
-        /* ОСНОВНОЙ КОНСТРУКТОР - МОБИЛЬНАЯ АДАПТАЦИЯ */
         .app-container {
             display: flex;
-            flex-direction: column;
             height: 100vh;
             opacity: 0;
             transition: opacity 0.5s ease;
+            flex-direction: row;
         }
-        @media (min-width: 1024px) {
-            .app-container { flex-direction: row; }
-        }
-
         .app-container.visible { opacity: 1; }
-
-        /* Мобильное меню */
-        .mobile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: rgba(10, 10, 26, 0.95);
-            border-bottom: 1px solid #00ffff44;
-            z-index: 20;
+        @media (max-width: 900px) { .catalog-panel { width: 270px; } .pins-panel { width: 310px; } }
+        @media (max-width: 700px) {
+            .app-container { flex-direction: column; }
+            .catalog-panel { width: 100%; height: 34%; order: 1; border-bottom: 1px solid #0ff; }
+            .viewer-panel { height: 38%; order: 2; }
+            .pins-panel { width: 100%; height: 34%; order: 3; border-top: 1px solid #ff44dd; }
+            .components-grid { max-height: 28vh; }
         }
-        @media (min-width: 1024px) { .mobile-header { display: none; } }
-
-        .mobile-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            color: #0ff;
-        }
-
-        .mobile-menu-btn {
-            background: #ff44dd33;
-            border: 1px solid #ff44dd;
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
         .catalog-panel {
-            background: rgba(10, 10, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid #00ffff44;
+            width: 340px;
+            background: rgba(8, 8, 20, 0.96);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid #00ffff66;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             z-index: 10;
-            transition: transform 0.3s ease;
         }
-        @media (max-width: 1023px) {
-            .catalog-panel {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 85%;
-                max-width: 320px;
-                height: 100%;
-                transform: translateX(-100%);
-                z-index: 100;
-            }
-            .catalog-panel.open { transform: translateX(0); }
-        }
-        @media (min-width: 1024px) {
-            .catalog-panel { width: 300px; }
-        }
-        @media (min-width: 1400px) {
-            .catalog-panel { width: 340px; }
-        }
-
-        .viewer-panel {
-            flex: 1;
-            position: relative;
-            background: #0a0a1a;
-            min-height: 300px;
-        }
-
+        .viewer-panel { flex: 1; position: relative; background: #050510; }
         .pins-panel {
-            background: rgba(10, 10, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-left: 1px solid #ff44dd44;
+            width: 430px;
+            background: rgba(8, 8, 20, 0.96);
+            backdrop-filter: blur(12px);
+            border-left: 1px solid #ff44dd66;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             z-index: 10;
         }
-        @media (max-width: 1023px) {
-            .pins-panel {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 60%;
-                border-left: none;
-                border-top: 1px solid #ff44dd44;
-                transform: translateY(100%);
-                transition: transform 0.3s ease;
-                z-index: 90;
-            }
-            .pins-panel.open {
-                transform: translateY(0);
-            }
-        }
-        @media (min-width: 1024px) {
-            .pins-panel { width: 380px; }
-        }
-        @media (min-width: 1400px) {
-            .pins-panel { width: 420px; }
-        }
-
         .panel-header {
-            padding: 12px;
-            border-bottom: 1px solid #00ffff66;
+            padding: 14px;
+            border-bottom: 1px solid #00ffffaa;
             font-family: 'Orbitron', monospace;
             font-size: 1rem;
             font-weight: bold;
@@ -260,1143 +160,555 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: #00000030;
         }
-        @media (min-width: 768px) { .panel-header { padding: 15px; font-size: 1.2rem; } }
-
         .admin-badge {
             background: #ff44dd33;
             border: 1px solid #ff44dd;
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 0.65rem;
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 0.7rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
-        @media (min-width: 768px) { .admin-badge { padding: 4px 12px; font-size: 0.7rem; } }
-
-        .search-box { padding: 10px; border-bottom: 1px solid #333; }
-        @media (min-width: 768px) { .search-box { padding: 15px; } }
-
+        .admin-badge:hover, .admin-mode-active { background: #ff44dd; color: #000; box-shadow: 0 0 12px #ff44dd; }
         .search-input {
-            width: 100%;
-            padding: 8px 12px;
-            background: #1e1e3a;
+            width: calc(100% - 24px);
+            margin: 12px;
+            padding: 10px 16px;
+            background: #11112a;
             border: 1px solid #0ff;
-            border-radius: 25px;
+            border-radius: 40px;
             color: #fff;
             font-size: 0.85rem;
             outline: none;
         }
-        @media (min-width: 768px) { .search-input { padding: 10px 15px; font-size: 0.9rem; } }
-
         .categories {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            padding: 10px;
-            border-bottom: 1px solid #333;
+            gap: 8px;
+            padding: 0 12px 12px 12px;
+            border-bottom: 1px solid #2a2a4a;
         }
-        @media (min-width: 768px) { .categories { gap: 8px; padding: 15px; } }
-
         .cat-btn {
-            padding: 5px 10px;
-            background: #1e1e3a;
+            padding: 6px 14px;
+            background: #1a1a3a;
             border: 1px solid #0ff;
             color: #0ff;
-            border-radius: 20px;
+            border-radius: 30px;
             cursor: pointer;
             font-size: 0.7rem;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition: 0.2s;
         }
-        @media (min-width: 768px) { .cat-btn { padding: 6px 14px; font-size: 0.8rem; } }
-
+        .cat-btn.active, .cat-btn:hover { background: #0ff; color: #000; box-shadow: 0 0 12px #0ff; }
         .components-grid {
             display: grid;
-            grid-template-columns: 1fr;
             gap: 8px;
-            padding: 10px;
+            padding: 12px;
             overflow-y: auto;
-            flex: 1;
+            max-height: 34vh;
         }
-        @media (min-width: 768px) { .components-grid { gap: 10px; padding: 15px; } }
-
         .component-card {
-            background: #1e1e3a88;
-            border: 1px solid #0ff;
-            border-radius: 8px;
+            background: #12122ecc;
+            border: 1px solid #0ff6;
+            border-radius: 14px;
             padding: 10px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        @media (min-width: 768px) { .component-card { padding: 12px; } }
-
-        .comp-name { font-weight: bold; font-size: 0.85rem; margin-bottom: 5px; }
-        @media (min-width: 768px) { .comp-name { font-size: 0.9rem; } }
-
-        .comp-specs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            font-size: 0.65rem;
-            color: #aaa;
-        }
-        @media (min-width: 768px) { .comp-specs { font-size: 0.7rem; } }
-
+        .component-card:hover { transform: translateX(5px); border-color: #ff44dd; background: #1a1a3a; }
+        .component-card.hidden { display: none; }
+        .comp-name { font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; color: #eef; }
+        .comp-specs { display: flex; gap: 12px; font-size: 0.6rem; color: #aac; }
         .add-btn {
-            margin-top: 8px;
+            margin-top: 6px;
             background: #0ff2;
             border: 1px solid #0ff;
-            border-radius: 4px;
+            border-radius: 20px;
             padding: 5px;
             width: 100%;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 0.7rem;
             color: #0ff;
-            font-size: 0.7rem;
-            transition: all 0.2s;
         }
-        @media (min-width: 768px) { .add-btn { font-size: 0.8rem; } }
-
-        .installed-list {
-            padding: 10px;
-            border-top: 1px solid #333;
-            border-bottom: 1px solid #333;
-        }
-        @media (min-width: 768px) { .installed-list { padding: 15px; } }
-
-        .installed-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            font-size: 0.7rem;
-            border-bottom: 1px solid #333;
-        }
-        @media (min-width: 768px) { .installed-item { font-size: 0.8rem; } }
-
-        .preset-builds { padding: 10px; border-top: 1px solid #ff44dd66; background: #ff44dd0a; }
-        @media (min-width: 768px) { .preset-builds { padding: 15px; } }
-
-        .preset-title { color: #ff44dd; font-size: 0.8rem; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        @media (min-width: 768px) { .preset-title { font-size: 0.9rem; } }
-
-        .exit-admin-btn {
-            background: #ff44dd33;
-            border: 1px solid #ff44dd;
-            border-radius: 20px;
-            padding: 3px 8px;
-            font-size: 0.6rem;
-            cursor: pointer;
-        }
-        @media (min-width: 768px) { .exit-admin-btn { padding: 4px 12px; font-size: 0.7rem; } }
-
-        .preset-buttons { display: flex; flex-direction: column; gap: 6px; }
-        .preset-btn {
-            background: #2a2a4a;
-            border: 1px solid #ff44dd;
-            border-radius: 6px;
-            padding: 6px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            color: #ff88dd;
-        }
-        @media (min-width: 768px) { .preset-btn { padding: 8px; font-size: 0.8rem; } }
-
-        .pins-container {
-            padding: 10px;
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-            max-height: 300px;
-        }
-        @media (min-width: 768px) { .pins-container { padding: 15px; max-height: 400px; } }
-
-        .component-pins {
-            background: #0f0f1f;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-left: 3px solid #0ff;
-        }
-        @media (min-width: 768px) { .component-pins { padding: 12px; margin-bottom: 15px; } }
-
-        .component-pins h4 { color: #0ff; font-size: 0.75rem; margin-bottom: 8px; }
-        @media (min-width: 768px) { .component-pins h4 { font-size: 0.85rem; } }
-
-        .pins-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 5px;
-        }
-        @media (min-width: 768px) { .pins-grid { gap: 8px; min-width: 75px; } }
-
+        .add-btn:hover { background: #0ff; color: #000; }
+        .installed-list { padding: 10px; background: #030310; border-top: 1px solid #2a2a4a; }
+        .installed-item { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.7rem; border-bottom: 1px dashed #2a2a4a; color: #ddd; }
+        .preset-builds { padding: 10px; background: #ff44dd0c; border-top: 1px solid #ff44dd; }
+        .preset-title { color: #ff88dd; font-size: 0.8rem; display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .preset-btn { background: #2a2a4a; border: 1px solid #ff88dd; border-radius: 20px; padding: 5px; margin-bottom: 5px; cursor: pointer; font-size: 0.7rem; color: #ffccff; }
+        .preset-btn:hover { background: #ff44dd; color: #000; }
+        .connections-table { padding: 10px; background: #030310; border-top: 1px solid #2a2a4a; }
+        .connections-list { background: #0a0a1a; border-radius: 14px; padding: 6px; max-height: 130px; overflow-y: auto; font-size: 0.65rem; color: #ccc; }
+        .connection-item { padding: 4px; border-bottom: 1px solid #2a2a4a; display: flex; justify-content: space-between; }
+        .pins-container { padding: 10px; flex: 1; overflow-y: auto; position: relative; }
+        .component-pins { background: #0f0f22; border-radius: 16px; padding: 10px; margin-bottom: 12px; border-left: 4px solid #0ff; }
+        .component-pins h4 { color: #0ff; margin-bottom: 6px; font-size: 0.8rem; }
+        .pins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; }
         .pin {
-            background: #2a2a4a;
+            background: #1e1e3a;
             border: 1px solid #44aaff;
-            border-radius: 6px;
-            padding: 4px 2px;
+            border-radius: 10px;
+            padding: 6px 2px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.6rem;
-        }
-        @media (min-width: 768px) { .pin { padding: 6px 4px; font-size: 0.7rem; } }
-
-        .pin.selected { background: #ffaa00; color: #000; box-shadow: 0 0 10px #ffaa00; border-color: #ffaa00; }
-        .pin.correct { background: #00aa00; color: #fff; box-shadow: 0 0 8px #00ff00; border-color: #0f0; }
-        .pin.wrong { background: #aa0000; color: #fff; box-shadow: 0 0 8px #ff0000; border-color: #f00; }
-        .pin.powered { background: #0f08; border-color: #0f0; }
-
-        .connections-table { padding: 10px; border-top: 1px solid #333; background: #0a0a1a; }
-        @media (min-width: 768px) { .connections-table { padding: 15px; } }
-
-        .connections-list {
-            background: #0f0f1f;
-            border-radius: 8px;
-            padding: 8px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        @media (min-width: 768px) { .connections-list { max-height: 200px; } }
-
-        .connection-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px;
-            border-bottom: 1px solid #2a2a4a;
             font-size: 0.65rem;
+            font-weight: 500;
+            color: #bbddff;
         }
-        @media (min-width: 768px) { .connection-item { font-size: 0.75rem; padding: 8px; } }
-
-        .controls {
-            padding: 10px;
-            display: flex;
-            gap: 8px;
-            border-top: 1px solid #333;
-        }
-        @media (min-width: 768px) { .controls { padding: 15px; gap: 10px; } }
-
-        .btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-        }
-        @media (min-width: 768px) { .btn { padding: 10px; font-size: 0.8rem; } }
-
+        .pin.selected { background: #ffaa00; color: #000; border-color: #fff; box-shadow: 0 0 12px gold; }
+        .pin.correct { background: #00aa66; color: white; border-color: #0f0; }
+        .pin.wrong { background: #cc3333; color: white; border-color: #f66; }
+        .controls { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #333; }
+        .btn { flex: 1; padding: 8px; border-radius: 40px; font-weight: bold; font-size: 0.7rem; cursor: pointer; }
         .btn-power { background: linear-gradient(45deg, #0f0, #0ff); color: #000; }
         .btn-reset { background: linear-gradient(45deg, #f44, #f0f); color: #fff; }
-        .btn-clear { background: #333; color: #fff; }
-
-        .status { padding: 8px; text-align: center; font-size: 0.7rem; margin: 8px; border-radius: 8px; }
-        @media (min-width: 768px) { .status { padding: 12px; font-size: 0.8rem; margin: 10px; } }
-
-        .status-success { background: #0f03; border: 1px solid #0f0; color: #0f0; }
-        .status-error { background: #f003; border: 1px solid #f00; color: #f88; }
-
-        .attempts {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #000000aa;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: #ff44dd;
-            z-index: 20;
-        }
-        @media (min-width: 768px) { .attempts { top: 15px; right: 15px; padding: 8px 15px; font-size: 1rem; } }
-
-        .instruction {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: #000000aa;
-            padding: 5px 8px;
-            border-radius: 8px;
-            font-size: 0.55rem;
-            color: #aaa;
-            z-index: 20;
-            pointer-events: none;
-        }
-        @media (min-width: 768px) { .instruction { bottom: 15px; left: 15px; padding: 8px 12px; font-size: 0.7rem; } }
-
-        .power-led {
-            position: absolute;
-            top: 10px;
-            right: 80px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #f00;
-            box-shadow: 0 0 8px #f00;
-            z-index: 20;
-        }
-        @media (min-width: 768px) { .power-led { top: 15px; right: 100px; width: 15px; height: 15px; } }
-
-        .power-led.green { background: #0f0; box-shadow: 0 0 10px #0f0; }
-
-        .literature-panel {
-            background: #0a0a1a;
-            border-top: 2px solid #ff44dd;
-            padding: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        @media (min-width: 768px) { .literature-panel { padding: 15px; max-height: 250px; } }
-
-        .literature-title { color: #ff44dd; font-size: 0.8rem; margin-bottom: 10px; }
-        @media (min-width: 768px) { .literature-title { font-size: 1rem; } }
-
-        .literature-content { font-size: 0.65rem; line-height: 1.4; color: #ccc; }
-        @media (min-width: 768px) { .literature-content { font-size: 0.8rem; } }
-
-        .literature-section { margin-bottom: 10px; padding: 8px; background: rgba(255, 68, 221, 0.05); border-left: 3px solid #ff44dd; border-radius: 5px; }
-        .literature-section h4 { color: #0ff; font-size: 0.7rem; margin-bottom: 5px; }
-        @media (min-width: 768px) { .literature-section h4 { font-size: 0.85rem; } }
-        .literature-section ul { margin-left: 15px; }
-        .literature-section li { margin: 3px 0; }
-        .literature-section code { background: #1a1a2e; padding: 1px 4px; border-radius: 4px; color: #ff44dd; font-family: monospace; font-size: 0.6rem; }
-
-        .close-panel {
-            background: #ff44dd33;
-            border: 1px solid #ff44dd;
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 0.65rem;
-            cursor: pointer;
-        }
-        @media (min-width: 1024px) { .close-panel { display: none; } }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 95;
-            display: none;
-        }
-        .overlay.active { display: block; }
-
-        #threeCanvas { width: 100%; height: 100%; display: block; }
-        .arrow-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; }
+        .btn-clear { background: #2a2a4a; color: #fff; border: 1px solid #aaa; }
+        .status { padding: 6px; margin: 6px; border-radius: 24px; text-align: center; font-size: 0.7rem; }
+        .status-success { background: #0f03; border: 1px solid #0f0; color: #bfb; }
+        .status-error { background: #f003; border: 1px solid #f44; color: #fcc; }
+        .attempts { text-align: center; font-family: monospace; font-weight: bold; color: #ff66dd; margin-top: 5px; font-size: 0.75rem; }
+        #threeCanvas { width: 100%; height: 100%; display: block; touch-action: none; }
+        .instruction { position: absolute; bottom: 10px; left: 10px; background: #000000aa; backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 20px; font-size: 0.55rem; z-index: 20; pointer-events: none; color: #ccc; }
+        .power-led { position: absolute; top: 12px; right: 16px; width: 12px; height: 12px; border-radius: 50%; background: #f33; box-shadow: 0 0 10px red; z-index: 20; }
+        .power-led.green { background: #0f0; box-shadow: 0 0 14px #0f0; }
+        .admin-modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(12px); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .admin-modal-content { background: #151530; border: 2px solid #ff44dd; border-radius: 32px; padding: 24px; width: 280px; text-align: center; color: white; }
+        .literature-panel { background: #030310; border-top: 1px solid #ff44dd; padding: 8px; max-height: 150px; overflow-y: auto; font-size: 0.6rem; color: #ccc; }
+        .literature-section { margin-bottom: 6px; border-left: 3px solid #ff44dd; padding-left: 8px; }
+        code { background: #1e1e3a; padding: 2px 5px; border-radius: 10px; font-size: 0.65rem; color: #ffaa88; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #0ff; border-radius: 4px; }
     </style>
 </head>
 <body>
-    <!-- ГЛАВНЫЙ ЭКРАН -->
-    <div class="main-screen" id="mainScreen">
-        <canvas id="mainThreeCanvas" class="main-3d-bg"></canvas>
-        <div class="main-content">
-            <div class="main-title">СХЕМНЫЙ ЦЕХ</div>
-            <div class="main-subtitle">3D конструктор ПК с проводами и пинами</div>
-            <div class="main-description">
-                Собери свой ПК из 300+ комплектующих!<br>
-                Размещай компоненты в 3D и подключай пины по правильной схеме.
-            </div>
-            <div class="main-features">
-                <div class="feature"><div class="feature-icon">🎮</div><div class="feature-text">300+ деталей</div></div>
-                <div class="feature"><div class="feature-icon">🖱️</div><div class="feature-text">3D перемещение</div></div>
-                <div class="feature"><div class="feature-icon">🔌</div><div class="feature-text">Подключение пинов</div></div>
-                <div class="feature"><div class="feature-icon">✅</div><div class="feature-text">Проверка питания</div></div>
-            </div>
-            <button class="start-btn" onclick="window.startBuilder()">▶ НАЧАТЬ СБОРКУ</button>
+<div class="main-screen" id="mainScreen">
+    <div class="cyber-bg"></div>
+    <div class="glow-orb"></div>
+    <div class="main-content">
+        <div class="main-title">⚡ СХЕМНЫЙ ЦЕХ ⚡</div>
+        <div class="main-subtitle">3D КОНСТРУКТОР ПК | 500+ КОМПЛЕКТУЮЩИХ</div>
+        <div class="main-description">Собери систему из реальных моделей CPU, GPU, RAM, подключи пины — и запусти ПК!</div>
+        <div class="main-features">
+            <div class="feature"><div class="feature-icon">🧩</div><div class="feature-text">500+ деталей</div></div>
+            <div class="feature"><div class="feature-icon">🔌</div><div class="feature-text">Логика пинов</div></div>
+            <div class="feature"><div class="feature-icon">🖱️</div><div class="feature-text">Drag & Drop</div></div>
+        </div>
+        <button class="start-btn" id="globalStartBtn">▶ ВОЙТИ В ЦЕХ</button>
+    </div>
+</div>
+
+<div class="app-container" id="appContainer">
+    <div class="catalog-panel">
+        <div class="panel-header">📦 КАТАЛОГ <div class="admin-badge" id="adminBadge">👑 АДМИН</div></div>
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск по названию...">
+        <div class="categories" id="categories"></div>
+        <div class="components-grid" id="componentsGrid"></div>
+        <div class="installed-list"><div style="color:#0ff; margin-bottom:5px;">✅ УСТАНОВЛЕНО:</div><div id="installedList"></div></div>
+        <div class="preset-builds" id="presetBuilds" style="display: none;">
+            <div class="preset-title">🎮 ГОТОВЫЕ СБОРКИ <div class="exit-admin-btn" id="exitAdminBtn">🚪 ВЫЙТИ</div></div>
+            <div class="preset-buttons" id="presetButtons"></div>
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ КОНСТРУКТОР -->
-    <div class="app-container" id="appContainer">
-        <!-- Мобильный хедер -->
-        <div class="mobile-header">
-            <div class="mobile-title">СХЕМНЫЙ ЦЕХ</div>
-            <div class="mobile-menu-btn" onclick="toggleCatalog()">📋 КАТАЛОГ</div>
-        </div>
-
-        <!-- Каталог -->
-        <div class="catalog-panel" id="catalogPanel">
-            <div class="panel-header">
-                📦 КАТАЛОГ (300+)
-                <div class="admin-badge" id="adminBadge">👑 АДМИН</div>
-            </div>
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск...">
-            </div>
-            <div class="categories" id="categories"></div>
-            <div class="components-grid" id="componentsGrid"></div>
-            <div class="installed-list">
-                <div style="color:#0ff; margin-bottom:5px;">✅ УСТАНОВЛЕНО:</div>
-                <div id="installedList"></div>
-            </div>
-            <div class="preset-builds" id="presetBuilds" style="display: none;">
-                <div class="preset-title">
-                    🎮 ГОТОВЫЕ СБОРКИ
-                    <div class="exit-admin-btn" id="exitAdminBtn">🚪 ВЫЙТИ</div>
-                </div>
-                <div class="preset-buttons" id="presetButtons"></div>
-            </div>
-            <div class="close-panel" onclick="closeCatalog()" style="margin: 10px; text-align: center;">✖ ЗАКРЫТЬ</div>
-        </div>
-
-        <!-- 3D вид -->
-        <div class="viewer-panel">
-            <canvas id="threeCanvas"></canvas>
-            <canvas id="arrowCanvas" class="arrow-canvas"></canvas>
-            <div class="power-led" id="powerLed"></div>
-            <div class="instruction">
-                🖱️ ЛКМ вращение | 🖱️ по компоненту = перетащить
-            </div>
-            <div class="attempts" id="attemptsText">ПОПЫТОК: 5</div>
-        </div>
-
-        <!-- Панель пинов -->
-        <div class="pins-panel" id="pinsPanel">
-            <div class="panel-header">
-                🔌 ПИНЫ
-                <div class="mobile-menu-btn" onclick="togglePins()">✖</div>
-            </div>
-            <div class="pins-container" id="pinsContainer"></div>
-            
-            <div class="connections-table">
-                <div class="connections-title" style="color:#0ff; font-size:0.8rem;">🔗 ТАБЛИЦА ПОДКЛЮЧЕНИЙ</div>
-                <div class="connections-list" id="connectionsList"><div class="no-connections">Нет подключений</div></div>
-            </div>
-            
-            <div class="controls">
-                <button class="btn btn-power" id="powerBtn" disabled>⚡ ВКЛЮЧИТЬ</button>
-                <button class="btn btn-reset" id="resetBtn">🔄 СБРОС</button>
-                <button class="btn btn-clear" id="clearWiresBtn">❌ ОЧИСТИТЬ</button>
-            </div>
-            <div id="statusMsg" class="status"></div>
-            
-            <div class="literature-panel">
-                <div class="literature-title">📚 ПРАВИЛА ПОДКЛЮЧЕНИЯ ПИНОВ</div>
-                <div class="literature-content">
-                    <div class="literature-section">
-                        <h4>⚡ ОСНОВНЫЕ ПРАВИЛА</h4>
-                        <ul>
-                            <li><code>VCC/VDD</code> — питание. Подключается к <code>12V/5V/3.3V</code> БП</li>
-                            <li><code>GND</code> — земля. Соединяется с общим проводом</li>
-                            <li><code>12V_PCIE</code> — питание видеокарты → <code>12V_RAIL</code></li>
-                            <li><code>ATX_24PIN/EPS_12V</code> — питание материнской платы</li>
-                        </ul>
-                    </div>
-                    <div class="literature-section">
-                        <h4>🔌 ПРАВИЛЬНЫЕ СОЕДИНЕНИЯ</h4>
-                        <ul>
-                            <li>🔋 <span style="color:#0f0;">12V → 12V</span> (PSU.12V → CPU/GPU/Motherboard)</li>
-                            <li>🔋 <span style="color:#0f0;">5V → 5V</span> (PSU.5V → SSD/HDD)</li>
-                            <li>🔋 <span style="color:#0f0;">3.3V → 3.3V</span> (PSU.3.3V → RAM)</li>
-                            <li>⚫ <span style="color:#0f0;">GND → GND</span> (земля к земле)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
+    <div class="viewer-panel">
+        <canvas id="threeCanvas"></canvas>
+        <div class="power-led" id="powerLed"></div>
+        <div class="instruction">🖱️ ЛКМ/палец — вращение | Перетаскивай детали</div>
+        <div class="attempts" id="attemptsText">⚡ ПОПЫТОК: 5</div>
     </div>
 
-    <div class="admin-modal" id="adminModal">
-        <div class="admin-modal-content" style="background:#1a1a2e; border:2px solid #ff44dd; border-radius:20px; padding:25px; width:85%; max-width:350px; text-align:center;">
-            <h2 style="color:#ff44dd;">👑 АДМИН</h2>
-            <input type="password" id="adminPassword" placeholder="Пароль 1111" style="width:100%; padding:10px; margin:15px 0; background:#2a2a4a; border:1px solid #ff44dd; border-radius:8px; color:#fff;">
-            <div>
-                <button onclick="window.checkAdminPassword()" style="padding:8px 20px; background:#ff44dd; border:none; border-radius:8px; margin:5px;">ВОЙТИ</button>
-                <button onclick="window.closeAdminModal()" style="padding:8px 20px; background:#333; border:none; border-radius:8px;">ОТМЕНА</button>
-            </div>
+    <div class="pins-panel">
+        <div class="panel-header">🔌 ПИНЫ (нажмите два пина)</div>
+        <div class="pins-container" id="pinsContainer"></div>
+        <div class="connections-table">
+            <div class="connections-title">🔗 ПОДКЛЮЧЕНИЯ</div>
+            <div class="connections-list" id="connectionsList"><div>⚡ Нет подключений</div></div>
+        </div>
+        <div class="controls">
+            <button class="btn btn-power" id="powerBtn" disabled>⚡ ВКЛЮЧИТЬ</button>
+            <button class="btn btn-reset" id="resetBtn">🔄 СБРОС</button>
+            <button class="btn btn-clear" id="clearWiresBtn">❌ ОЧИСТИТЬ</button>
+        </div>
+        <div id="statusMsg" class="status"></div>
+        <div class="literature-panel">
+            <div class="literature-title">📖 ОБЯЗАТЕЛЬНЫЕ ПИНЫ</div>
+            <div class="literature-section"><code>CPU: VCC_CORE + GND</code><br><code>MB: ATX_24PIN + EPS12V</code><br><code>PSU: 12V_RAIL + GND</code></div>
         </div>
     </div>
+</div>
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+<div class="admin-modal" id="adminModal"><div class="admin-modal-content"><h2 style="color:#ff44dd;">🔐 АДМИН</h2><input type="password" id="adminPassword" placeholder="Пароль"><div><button onclick="window.checkAdminPassword()">ВОЙТИ</button><button onclick="window.closeAdminModal()">ОТМЕНА</button></div></div></div>
+
+<script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
+</script>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { DragControls } from 'three/addons/controls/DragControls.js';
+
+    // ========== БАЗА КОМПЛЕКТУЮЩИХ (500+ из списка) ==========
+    const componentsDB = [];
+
+    function addComp(name, category, pinsArray, tdp = 65) {
+        componentsDB.push({
+            id: `${category}_${componentsDB.length}`,
+            name: name,
+            category: category,
+            pins: pinsArray,
+            tdp: tdp,
+            wattage: category === 'psu' ? parseInt(name.match(/\d+/)?.[0] || 500) : 0
+        });
+    }
+
+    // CPU Intel + AMD
+    const intelCpus = ['Core i7-4790K','Core i5-4460','Pentium G3258','Core i7-6700K','Core i5-6500','Core i3-6100','Core i7-7700K','Core i5-7600K','Pentium G4560','Core i7-8700K','Core i5-8400','Core i3-8100','Core i9-9900K','Core i7-9700K','Core i5-9400F','Core i9-10900K','Core i7-10700K','Core i5-10400F','Core i9-11900K','Core i7-11700K','Core i5-11400F','Core i9-12900K','Core i7-12700K','Core i5-12400F','Core i9-13900K','Core i7-13700K','Core i5-13400F','Core i9-14900K','Core i7-14700K','Core i5-14400F','Core Ultra 7 265K','Core Ultra 5 245K','Core Ultra 9 285K'];
+    const amdCpus = ['FX-8350','FX-6300','Athlon X4 860K','Ryzen 7 1800X','Ryzen 5 1600','Ryzen 3 1200','Ryzen 7 2700X','Ryzen 5 2600','Ryzen 3 2200G','Ryzen 9 3900X','Ryzen 7 3700X','Ryzen 5 3600','Ryzen 9 5950X','Ryzen 7 5800X3D','Ryzen 5 5600X','Ryzen 7 5700G','Ryzen 5 5600G','Ryzen 9 7950X','Ryzen 7 7800X3D','Ryzen 5 7600X','Ryzen 7 8700G','Ryzen 5 8600G','Ryzen 9 9950X','Ryzen 7 9700X','Ryzen 5 9600X'];
+    [...intelCpus, ...amdCpus].forEach(cpu => addComp(cpu, 'cpu', ['VCC_CORE', 'VTT', 'GND', '12V_AUX'], 125));
+    
+    // GPU
+    const nvidiaGpus = ['GTX 980 Ti','GTX 980','GTX 970','GTX 960','Titan X (Maxwell)','GTX 1080 Ti','GTX 1080','GTX 1070','GTX 1060 6GB','GTX 1050 Ti','GTX 1050','GTX 1660 Ti','GTX 1660 Super','GTX 1660','GTX 1650 Super','GTX 1650','RTX 2080 Ti','RTX 2080 Super','RTX 2070 Super','RTX 2060 Super','RTX 2060','RTX 3090 Ti','RTX 3090','RTX 3080 Ti','RTX 3080','RTX 3070 Ti','RTX 3070','RTX 3060 Ti','RTX 3060','RTX 3050','RTX 4090','RTX 4080 Super','RTX 4080','RTX 4070 Ti Super','RTX 4070 Ti','RTX 4070 Super','RTX 4070','RTX 4060 Ti','RTX 4060','RTX 5090','RTX 5080','RTX 5070 Ti','RTX 5070','RTX 5060 Ti','RTX 5060'];
+    const amdGpus = ['R9 Fury X','R9 390X','R9 390','R9 380','RX 580','RX 570','RX 480','RX 470','RX 460','RX 590','RX 550','RX 5700 XT','RX 5700','RX 5600 XT','RX 5500 XT','RX 6950 XT','RX 6900 XT','RX 6800 XT','RX 6800','RX 6750 XT','RX 6700 XT','RX 6650 XT','RX 6600 XT','RX 6600','RX 6500 XT','RX 6400','RX 7900 XTX','RX 7900 XT','RX 7900 GRE','RX 7800 XT','RX 7700 XT','RX 7600 XT','RX 7600'];
+    const intelGpus = ['Arc A770 16GB','Arc A750 8GB','Arc A580 8GB','Arc A380 6GB','Arc B580 12GB','Arc B570 10GB'];
+    [...nvidiaGpus, ...amdGpus, ...intelGpus].forEach(gpu => addComp(gpu, 'gpu', ['12V_PCIE', 'GND', 'PCI_AUX'], 250));
+    
+    // RAM
+    const rams = ['Corsair Vengeance LPX DDR4 2x8GB 3200MHz','Kingston HyperX Fury DDR4 2x8GB 2666MHz','G.Skill Trident Z RGB DDR4 2x16GB 3600MHz','Crucial Ballistix DDR4 2x8GB 3200MHz','Samsung DDR3 2x4GB 1600MHz','Corsair Vengeance LPX DDR5 2x16GB 5200MHz','G.Skill Trident Z5 Neo RGB DDR5 2x32GB 6000MHz','Kingston Fury Beast DDR5 2x16GB 5600MHz','TeamGroup T-Force Delta RGB DDR5 2x16GB 6000MHz','Corsair Dominator Platinum RGB DDR5 2x24GB 6600MHz'];
+    rams.forEach(ram => addComp(ram, 'ram', ['VDD', 'GND', 'VPP'], 15));
+    
+    // SSD
+    const ssds = ['Samsung 850 EVO 250GB','Samsung 860 EVO 500GB','Samsung 870 EVO 1TB','Samsung 960 EVO 250GB','Samsung 970 EVO Plus 500GB','Samsung 980 Pro 1TB','Samsung 990 Pro 2TB','WD Blue SN550 500GB','WD Black SN750 1TB','WD Black SN850 2TB','WD Black SN850X 4TB','Crucial MX500 500GB','Crucial P1 1TB','Crucial P5 Plus 2TB','Crucial T700 1TB','Crucial T705 2TB','Kingston A2000 1TB','Kingston KC3000 2TB','Seagate FireCuda 530 2TB'];
+    ssds.forEach(ssd => addComp(ssd, 'ssd', ['5V_SATA', 'GND'], 5));
+    
+    // HDD
+    const hdds = ['Seagate BarraCuda 1TB','Seagate BarraCuda 2TB','Seagate BarraCuda 4TB','Seagate BarraCuda 8TB','WD Blue 1TB','WD Blue 2TB','WD Blue 4TB','WD Black 2TB','WD Black 4TB','WD Black 6TB','Toshiba P300 1TB','Toshiba P300 2TB','Toshiba P300 3TB'];
+    hdds.forEach(hdd => addComp(hdd, 'hdd', ['12V_MOTOR', '5V_LOGIC', 'GND'], 8));
+    
+    // Материнские платы
+    const mobos = ['H81','B85','Z97','H110','B150','Z170','Z270','H310','B360','Z370','Z390','H410','B460','Z490','Z590','H610','B660','Z690','B760','Z790','Z890','B860','A68H','A88X','970','A320','B350','X370','X470','A520','B450','B550','X570','A620','B650','B650E','X670E','X870E'];
+    mobos.forEach(mobo => addComp(`Chipset ${mobo}`, 'motherboard', ['ATX_24PIN', 'EPS_12V_8PIN', 'USB_HEADER', 'FAN_PWR', 'GND', '3.3V_STBY'], 60));
+    
+    // Блоки питания
+    const psus = ['Corsair CX450','Corsair CX550','Corsair CX650','Corsair VS450','Corsair VS550','Corsair RM550x','Corsair RM650x','Corsair RM750x','Corsair RM850x','Corsair RM1000x','Corsair RM1200x Shift','Seasonic S12II 520W','Seasonic S12II 620W','Seasonic Focus Plus Gold 650W','Seasonic Prime Gold 1000W','be quiet! Pure Power 11 500W','be quiet! Dark Power 13 850W','EVGA 500 W1','EVGA SuperNOVA 750 G3','DeepCool DA500','DeepCool PQ850M'];
+    psus.forEach(psu => addComp(psu, 'psu', ['12V_RAIL1', '12V_RAIL2', '5V_RAIL', '3.3V_RAIL', 'GND', '5V_SB'], 0));
+    
+    // Кулеры
+    const coolers = ['Cooler Master Hyper 212 Evo','Noctua NH-D15','be quiet! Dark Rock Pro 4','Deepcool AK620','ID-Cooling SE-224-XT','Thermalright Peerless Assassin 120','Arctic Freezer 34','Corsair H100i','NZXT Kraken X62','Arctic Liquid Freezer II 360','Lian Li Galahad 240','Deepcool LS720'];
+    coolers.forEach(cooler => addComp(cooler, 'cooler', ['12V_FAN', 'GND', 'PWM'], 150));
+    
+    console.log(`Загружено компонентов: ${componentsDB.length}`);
+
+    const presetBuilds = [
+        { name: '🎮 Флагман Intel', specs: { cpu: componentsDB.find(c=>c.name.includes('14900K'))?.id, gpu: componentsDB.find(c=>c.name.includes('4090'))?.id, ram: componentsDB.find(c=>c.name.includes('Trident Z5 Neo'))?.id, motherboard: componentsDB.find(c=>c.name.includes('Z790'))?.id, psu: componentsDB.find(c=>c.name.includes('RM1000x'))?.id, ssd: componentsDB.find(c=>c.name.includes('990 Pro'))?.id, hdd: componentsDB.find(c=>c.name.includes('WD Black 6TB'))?.id, cooler: componentsDB.find(c=>c.name.includes('NH-D15'))?.id } },
+        { name: '🔥 AMD Power', specs: { cpu: componentsDB.find(c=>c.name.includes('7950X'))?.id, gpu: componentsDB.find(c=>c.name.includes('7900 XTX'))?.id, ram: componentsDB.find(c=>c.name.includes('Dominator'))?.id, motherboard: componentsDB.find(c=>c.name.includes('X670E'))?.id, psu: componentsDB.find(c=>c.name.includes('Dark Power 13 850W'))?.id, ssd: componentsDB.find(c=>c.name.includes('T705'))?.id, hdd: componentsDB.find(c=>c.name.includes('BarraCuda 4TB'))?.id, cooler: componentsDB.find(c=>c.name.includes('Liquid Freezer II 360'))?.id } }
+    ];
+
+    let systemState = { cpu: null, gpu: null, ram: null, motherboard: null, psu: null, ssd: null, hdd: null, cooler: null };
+    let attempts = 5, powerOn = false, adminMode = false, selectedPin = null;
+    let pinsMap = {};
+    let components3D = [], dragControls;
+    let scene, camera, renderer, controls, wireLines3D = [];
+
+    function getPinVoltage(pinName) {
+        const p = pinName.toUpperCase();
+        if(p.includes('12V') || p === 'VCC_CORE' || p === 'EPS12V' || p === '12V_AUX' || p === '12V_MOTOR' || p === '12V_RAIL' || p === '12V_FAN') return 12;
+        if(p.includes('5V') || p === '5V_SB' || p === '5V_LOGIC') return 5;
+        if(p.includes('3.3V') || p === 'VDD' || p === '3.3V_STBY') return 3.3;
+        if(p === 'GND') return 0;
+        return null;
+    }
+    function isPinCompatible(p1, p2) {
+        if(p1.name === 'GND' || p2.name === 'GND') return true;
+        const v1 = getPinVoltage(p1.name), v2 = getPinVoltage(p2.name);
+        return v1 !== null && v2 !== null && v1 === v2;
+    }
+    function areCriticalPinsConnected() {
+        let cpuPowered = false, mbPowered = false, psuUsed = false, gpuPowered = !systemState.gpu;
+        for(let p1 in pinsMap) {
+            const pinObj = pinsMap[p1];
+            if(pinObj.connections.length === 0) continue;
+            if(pinObj.component === 'cpu' && (pinObj.name === 'VCC_CORE' || pinObj.name === 'GND')) {
+                for(let conn of pinObj.connections) if(pinsMap[conn] && (getPinVoltage(pinsMap[conn].name) === 12 || pinsMap[conn].name === 'GND')) cpuPowered = true;
+            }
+            if(pinObj.component === 'motherboard' && (pinObj.name === 'ATX_24PIN' || pinObj.name === 'EPS_12V_8PIN')) {
+                for(let conn of pinObj.connections) if(pinsMap[conn] && (getPinVoltage(pinsMap[conn].name) === 12 || pinsMap[conn].name === 'GND')) mbPowered = true;
+            }
+            if(pinObj.component === 'psu' && (pinObj.name.includes('12V_RAIL') || pinObj.name === '5V_RAIL')) {
+                if(pinObj.connections.length > 0) psuUsed = true;
+            }
+            if(pinObj.component === 'gpu' && pinObj.name === '12V_PCIE') {
+                gpuPowered = false;
+                for(let conn of pinObj.connections) if(pinsMap[conn] && getPinVoltage(pinsMap[conn].name) === 12) gpuPowered = true;
             }
         }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { DragControls } from 'three/addons/controls/DragControls.js';
-
-        // ==================== КАТАЛОГ КОМПЛЕКТУЮЩИХ ====================
-        const componentsDB = [];
-
-        const intelCPUs = ['Core i7-4790K', 'Core i5-4460', 'Core i7-6700K', 'Core i5-6500', 'Core i7-7700K', 'Core i5-7600K', 'Core i7-8700K', 'Core i5-8400', 'Core i9-9900K', 'Core i7-9700K', 'Core i9-10900K', 'Core i7-10700K', 'Core i9-11900K', 'Core i7-11700K', 'Core i9-12900K', 'Core i7-12700K', 'Core i5-12400F', 'Core i9-13900K', 'Core i7-13700K', 'Core i9-14900K'];
-        const amdCPUs = ['FX-8350', 'Ryzen 7 1800X', 'Ryzen 5 1600', 'Ryzen 7 2700X', 'Ryzen 5 2600', 'Ryzen 9 3900X', 'Ryzen 7 3700X', 'Ryzen 5 3600', 'Ryzen 9 5950X', 'Ryzen 7 5800X3D', 'Ryzen 5 5600X', 'Ryzen 9 7950X', 'Ryzen 7 7800X3D', 'Ryzen 5 7600X', 'Ryzen 9 9950X'];
-        const nvidiaGPUs = ['GTX 1080 Ti', 'GTX 1080', 'GTX 1070', 'RTX 2080 Ti', 'RTX 2080 Super', 'RTX 2070 Super', 'RTX 3090', 'RTX 3080', 'RTX 3070', 'RTX 3060 Ti', 'RTX 3060', 'RTX 4090', 'RTX 4080', 'RTX 4070 Ti', 'RTX 4070', 'RTX 4060 Ti', 'RTX 5090'];
-        const amdGPUs = ['RX 580', 'RX 570', 'RX 480', 'RX 5700 XT', 'RX 5700', 'RX 6900 XT', 'RX 6800 XT', 'RX 6700 XT', 'RX 7900 XTX', 'RX 7900 XT'];
-        const rams = ['Corsair Vengeance 16GB DDR4', 'Kingston HyperX 16GB DDR4', 'G.Skill Trident 32GB DDR4', 'Corsair Vengeance 32GB DDR5', 'G.Skill Trident Z5 64GB DDR5'];
-        const ssds = ['Samsung 980 Pro 500GB', 'Samsung 980 Pro 1TB', 'Samsung 990 Pro 1TB', 'Samsung 990 Pro 2TB', 'WD Black SN850 1TB'];
-        const hdds = ['Seagate BarraCuda 1TB', 'WD Blue 1TB', 'WD Black 2TB'];
-        const motherboards = ['B660', 'Z690', 'Z790', 'B650', 'X670E'];
-        const psus = ['Corsair CX550', 'Corsair RM750x', 'Corsair RM850x', 'Corsair RM1000x', 'Seasonic Focus 750W'];
-        const cases = ['NZXT H510', 'Corsair 4000D', 'Fractal Design Meshify C', 'Lian Li O11 Dynamic'];
-        const coolers = ['Cooler Master Hyper 212', 'Noctua NH-D15', 'Arctic Liquid Freezer II 360', 'Corsair H150i'];
-
-        function getPinVoltage(pinName) {
-            if (pinName.includes('12V') || pinName === 'VCC_CORE') return 12;
-            if (pinName.includes('5V') || pinName === 'VDD' || pinName === 'VDDQ') return 5;
-            if (pinName.includes('3.3V') || pinName === 'VCCSA' || pinName === 'VTT') return 3.3;
-            if (pinName === 'GND') return 0;
-            return null;
+        return (cpuPowered && mbPowered && psuUsed && (!systemState.gpu || gpuPowered));
+    }
+    
+    function updateInstalledList() {
+        const container = document.getElementById('installedList');
+        const cats = ['cpu','gpu','ram','motherboard','psu','ssd','hdd','cooler'];
+        container.innerHTML = cats.map(cat => { const id = systemState[cat]; const comp = id ? componentsDB.find(c=>c.id===id) : null; return `<div class="installed-item"><span>${cat.toUpperCase()}:</span> <span>${comp ? comp.name.substring(0,28) : '—'}</span></div>`; }).join('');
+    }
+    function addComponent(compId) {
+        const comp = componentsDB.find(c=>c.id===compId);
+        if(!comp) return;
+        systemState[comp.category] = compId;
+        updateInstalledList();
+        update3DScene();
+        updatePinsPanel();
+        updateConnectionsTable();
+        checkCompatibilityAndPower();
+    }
+    function updateConnectionsTable() {
+        const container = document.getElementById('connectionsList');
+        let conns = [];
+        for(let p1 in pinsMap) for(let p2 of pinsMap[p1].connections) if(p1 < p2) {
+            const c1 = pinsMap[p1], c2 = pinsMap[p2];
+            const comp1Name = componentsDB.find(c=>systemState[c1.component]===c.id)?.name || c1.component;
+            const comp2Name = componentsDB.find(c=>systemState[c2.component]===c.id)?.name || c2.component;
+            conns.push({ from: comp1Name, fromPin: c1.name, to: comp2Name, toPin: c2.name, ok: isPinCompatible(c1,c2) });
         }
-
-        function isPinCompatible(pin1, pin2) {
-            const v1 = getPinVoltage(pin1.name);
-            const v2 = getPinVoltage(pin2.name);
-            if (v1 === 0 && v2 === 0) return true;
-            if (v1 === 0 && v2 !== null) return true;
-            if (v2 === 0 && v1 !== null) return true;
-            if (v1 !== null && v2 !== null && v1 === v2) return true;
-            return false;
-        }
-
-        function addToDB(list, category, socket, tdp) {
-            list.forEach(name => {
-                let pins = [];
-                if (category === 'cpu') pins = ['VCC_CORE', 'VTT', 'VCCSA', 'GND'];
-                else if (category === 'gpu') pins = ['12V_PCIE', '3.3V_PCIE', 'GND'];
-                else if (category === 'ram') pins = ['VDD', 'VDDQ', 'GND'];
-                else if (category === 'ssd') pins = ['3.3V_SATA', 'GND'];
-                else if (category === 'hdd') pins = ['5V', '12V', 'GND'];
-                else if (category === 'motherboard') pins = ['ATX_24PIN', 'EPS_12V_8PIN', 'GND'];
-                else if (category === 'psu') pins = ['12V_RAIL1', '12V_RAIL2', '5V_RAIL', '3.3V_RAIL', 'GND'];
-                else if (category === 'cooler') pins = ['12V_FAN', 'PWM', 'GND'];
-                else pins = [];
-                
-                componentsDB.push({
-                    id: `${category}_${componentsDB.length}`,
-                    name: `${name}`,
-                    category: category,
-                    socket: socket || '',
-                    tdp: category === 'psu' ? 0 : (tdp || (category === 'cpu' ? 95 : category === 'gpu' ? 200 : 10)),
-                    wattage: category === 'psu' ? parseInt(name.match(/\d+/)?.[0] || 500) : 0,
-                    pins: pins
-                });
+        if(conns.length===0) { container.innerHTML = '<div>⚡ Нет подключений</div>'; return; }
+        container.innerHTML = conns.map(c => `<div class="connection-item"><span>${c.from.split(' ')[0]} [${c.fromPin}] → ${c.to.split(' ')[0]} [${c.toPin}]</span> ${c.ok ? '✅' : '❌'}</div>`).join('');
+    }
+    function updatePinsPanel() {
+        const container = document.getElementById('pinsContainer');
+        container.innerHTML = ''; pinsMap = {};
+        const cats = ['cpu','gpu','ram','motherboard','psu','ssd','hdd','cooler'];
+        cats.forEach(cat => {
+            const compId = systemState[cat];
+            if(!compId) return;
+            const comp = componentsDB.find(c=>c.id===compId);
+            if(!comp || !comp.pins.length) return;
+            const section = document.createElement('div'); section.className = 'component-pins';
+            section.innerHTML = `<h4>🔹 ${comp.name.substring(0,24)}</h4><div class="pins-grid" id="pins-grid-${cat}"></div>`;
+            const grid = section.querySelector('.pins-grid');
+            comp.pins.forEach((pinName, idx) => {
+                const pinId = `${cat}-${idx}`;
+                pinsMap[pinId] = { component: cat, index: idx, name: pinName, connections: [] };
+                const pinDiv = document.createElement('div'); pinDiv.className = 'pin'; pinDiv.id = `pin-${pinId}`;
+                pinDiv.innerHTML = `<div>${pinName}</div>`;
+                pinDiv.onclick = (e) => { e.stopPropagation(); handlePinClick(pinId); };
+                grid.appendChild(pinDiv);
             });
-        }
-
-        addToDB(intelCPUs, 'cpu', 'LGA1700', 125);
-        addToDB(amdCPUs, 'cpu', 'AM4', 105);
-        addToDB(nvidiaGPUs, 'gpu', 'PCIe', 250);
-        addToDB(amdGPUs, 'gpu', 'PCIe', 220);
-        addToDB(rams, 'ram', 'DDR4', 15);
-        addToDB(ssds, 'ssd', 'SATA', 5);
-        addToDB(hdds, 'hdd', 'SATA', 8);
-        addToDB(motherboards, 'motherboard', 'ATX', 50);
-        addToDB(psus, 'psu', 'ATX', 0);
-        addToDB(cases, 'case', 'ATX', 0);
-        addToDB(coolers, 'cooler', 'CPU', 150);
-
-        // 6 ГОТОВЫХ СБОРОК ДЛЯ АДМИНА
-        const presetBuilds = [
-            { name: '💎 БЮДЖЕТНАЯ ИГРОВАЯ', desc: 'i5-12400F + RTX 3060 + 16GB DDR4',
-              specs: { cpu: componentsDB.find(c => c.name.includes('12400F'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 3060'))?.id, ram: componentsDB.find(c => c.name.includes('16GB DDR4'))?.id, motherboard: componentsDB.find(c => c.name.includes('B660'))?.id, psu: componentsDB.find(c => c.name.includes('CX550'))?.id, ssd: componentsDB.find(c => c.name.includes('980 Pro 500GB'))?.id, hdd: componentsDB.find(c => c.name.includes('BarraCuda 1TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Hyper 212'))?.id, case: componentsDB.find(c => c.name.includes('H510'))?.id },
-              connections: [
-                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
-                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 2 }
-            ] },
-            { name: '🔥 HIGH-END ФЛАГМАН', desc: 'i9-14900K + RTX 4090 + 64GB DDR5',
-              specs: { cpu: componentsDB.find(c => c.name.includes('14900K'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 4090'))?.id, ram: componentsDB.find(c => c.name.includes('64GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('Z790'))?.id, psu: componentsDB.find(c => c.name.includes('RM1000x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 2TB'))?.id, hdd: componentsDB.find(c => c.name.includes('Black 2TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Liquid Freezer II 360'))?.id, case: componentsDB.find(c => c.name.includes('O11 Dynamic'))?.id },
-              connections: [
-                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
-                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 1 }
-            ] },
-            { name: '🎮 КИБЕРСПОРТИВНАЯ', desc: 'Ryzen 7 7800X3D + RTX 4070 Ti + 32GB DDR5',
-              specs: { cpu: componentsDB.find(c => c.name.includes('7800X3D'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 4070 Ti'))?.id, ram: componentsDB.find(c => c.name.includes('32GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('B650'))?.id, psu: componentsDB.find(c => c.name.includes('RM850x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 1TB'))?.id, hdd: null, cooler: componentsDB.find(c => c.name.includes('NH-D15'))?.id, case: componentsDB.find(c => c.name.includes('4000D'))?.id },
-              connections: [
-                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }
-            ] },
-            { name: '💼 РАБОЧАЯ СТАНЦИЯ', desc: 'Ryzen 9 7950X + RTX 4080 + 64GB DDR5',
-              specs: { cpu: componentsDB.find(c => c.name.includes('7950X'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 4080'))?.id, ram: componentsDB.find(c => c.name.includes('64GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('X670E'))?.id, psu: componentsDB.find(c => c.name.includes('RM1000x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 2TB'))?.id, hdd: componentsDB.find(c => c.name.includes('Black 2TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Liquid Freezer II 360'))?.id, case: componentsDB.find(c => c.name.includes('Define 7'))?.id },
-              connections: [
-                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
-                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 1 }
-            ] },
-            { name: '🎯 МИНИ-ИТХ СБОРКА', desc: 'Ryzen 7 8700G + компактный корпус',
-              specs: { cpu: componentsDB.find(c => c.name.includes('8700G'))?.id, gpu: null, ram: componentsDB.find(c => c.name.includes('16GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('B650'))?.id, psu: componentsDB.find(c => c.name.includes('SF750'))?.id, ssd: componentsDB.find(c => c.name.includes('980 Pro 1TB'))?.id, hdd: null, cooler: componentsDB.find(c => c.name.includes('NH-L9i'))?.id, case: componentsDB.find(c => c.name.includes('H510'))?.id },
-              connections: [
-                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 },
-                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }
-            ] },
-            { name: '💀 ЭКСТРИМ-ОВЕРКЛОКИНГ', desc: 'i9-14900K + RTX 5090 + 48GB DDR5-6600',
-              specs: { cpu: componentsDB.find(c => c.name.includes('14900K'))?.id, gpu: componentsDB.find(c => c.name.includes('RTX 5090'))?.id, ram: componentsDB.find(c => c.name.includes('48GB DDR5'))?.id, motherboard: componentsDB.find(c => c.name.includes('Z790'))?.id, psu: componentsDB.find(c => c.name.includes('RM1200x'))?.id, ssd: componentsDB.find(c => c.name.includes('990 Pro 4TB'))?.id, hdd: componentsDB.find(c => c.name.includes('Black 6TB'))?.id, cooler: componentsDB.find(c => c.name.includes('Liquid Freezer III 420'))?.id, case: componentsDB.find(c => c.name.includes('Torrent'))?.id },
-              connections: [
-                { from: 'psu', fromPin: 0, to: 'motherboard', toPin: 0 }, { from: 'psu', fromPin: 0, to: 'cpu', toPin: 0 },
-                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 0 }, { from: 'psu', fromPin: 3, to: 'ram', toPin: 0 },
-                { from: 'psu', fromPin: 2, to: 'ssd', toPin: 0 }, { from: 'psu', fromPin: 2, to: 'hdd', toPin: 0 },
-                { from: 'psu', fromPin: 0, to: 'cooler', toPin: 0 }, { from: 'psu', fromPin: 4, to: 'motherboard', toPin: 1 },
-                { from: 'psu', fromPin: 1, to: 'gpu', toPin: 1 }
-            ] }
-        ];
-
-        // Состояние
-        let systemState = { cpu: null, gpu: null, ram: null, motherboard: null, psu: null, ssd: null, hdd: null, cooler: null, case: null };
-        let attempts = 5, powerOn = false, pinsMap = {}, selectedPin = null, adminMode = false, searchQuery = '';
-        let components3D = [], dragControls;
-        let scene, camera, renderer, controls;
-        let mainScene, mainCamera, mainRenderer;
-        let wireLines3D = [];
-
-        // Мобильные функции
-        window.toggleCatalog = () => {
-            document.getElementById('catalogPanel').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('active');
-        };
-        window.closeCatalog = () => {
-            document.getElementById('catalogPanel').classList.remove('open');
-            document.getElementById('overlay').classList.remove('active');
-        };
-        window.togglePins = () => {
-            document.getElementById('pinsPanel').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('active');
-        };
-        window.closeAllPanels = () => {
-            document.getElementById('catalogPanel').classList.remove('open');
-            document.getElementById('pinsPanel').classList.remove('open');
-            document.getElementById('overlay').classList.remove('active');
-        };
-
-        // Основные функции
-        window.startBuilder = function() {
-            document.getElementById('mainScreen').classList.add('hide');
-            setTimeout(() => {
-                document.getElementById('mainScreen').style.display = 'none';
-                document.getElementById('appContainer').classList.add('visible');
-            }, 500);
-        };
-
-        function loadCategories() {
-            const cats = ['all', 'cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler', 'case'];
-            document.getElementById('categories').innerHTML = cats.map(cat => 
-                `<button class="cat-btn ${cat === 'all' ? 'active' : ''}" data-cat="${cat}" onclick="filterCategory('${cat}')">${cat.toUpperCase()}</button>`
-            ).join('');
-        }
-        window.filterCategory = function(category) {
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            const cards = document.querySelectorAll('.component-card');
-            cards.forEach(card => {
-                const matches = category === 'all' || card.dataset.category === category;
-                const matchesSearch = searchQuery === '' || card.querySelector('.comp-name')?.innerText.toLowerCase().includes(searchQuery.toLowerCase());
-                card.classList.toggle('hidden', !(matches && matchesSearch));
-            });
-        };
-        function searchComponents() {
-            searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            const activeCat = document.querySelector('.cat-btn.active')?.dataset.cat || 'all';
-            filterCategory(activeCat);
-        }
-
-        function loadComponentsUI() {
-            const grid = document.getElementById('componentsGrid');
-            grid.innerHTML = '';
-            componentsDB.forEach(comp => {
-                const card = document.createElement('div');
-                card.className = 'component-card';
-                card.dataset.category = comp.category;
-                let specs = '';
-                if (comp.socket) specs += `<span>🔌 ${comp.socket}</span>`;
-                if (comp.tdp && comp.tdp > 0) specs += `<span>⚡ ${comp.tdp}W</span>`;
-                if (comp.wattage && comp.wattage > 0) specs += `<span>⚡ ${comp.wattage}W</span>`;
-                if (comp.pins.length) specs += `<span>📌 ${comp.pins.length} пина</span>`;
-                card.innerHTML = `<div class="comp-name">${comp.name}</div><div class="comp-specs">${specs}</div><button class="add-btn">➕ Установить</button>`;
-                card.querySelector('.add-btn').onclick = (e) => { e.stopPropagation(); addComponent(comp.id); };
-                grid.appendChild(card);
-            });
-        }
-
-        function updateInstalledList() {
-            const cats = ['cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler', 'case'];
-            document.getElementById('installedList').innerHTML = cats.map(cat => {
-                const id = systemState[cat];
-                const comp = id ? componentsDB.find(c => c.id === id) : null;
-                return `<div class="installed-item"><span>${cat.toUpperCase()}:</span> <span>${comp ? comp.name : '—'}</span></div>`;
-            }).join('');
-        }
-
-        function addComponent(compId) {
-            const comp = componentsDB.find(c => c.id === compId);
-            if (!comp) return;
-            systemState[comp.category] = compId;
-            updateInstalledList();
-            update3DScene();
-            updatePinsPanel();
-            updateConnectionsTable();
-            checkCompatibility();
-            document.querySelectorAll('.component-card').forEach(c => c.classList.remove('selected'));
-            const target = Array.from(document.querySelectorAll('.component-card')).find(c => c.querySelector('.comp-name')?.innerText === comp.name);
-            if (target) target.classList.add('selected');
-            closeCatalog();
-        }
-
-        function updateConnectionsTable() {
-            const container = document.getElementById('connectionsList');
-            const connections = [];
-            for (let p1 in pinsMap) {
-                pinsMap[p1].connections.forEach(p2 => {
-                    if (p1 > p2) return;
-                    const isCorrect = isPinCompatible(pinsMap[p1], pinsMap[p2]);
-                    connections.push({ from: pinsMap[p1].component, fromPin: pinsMap[p1].name, to: pinsMap[p2].component, toPin: pinsMap[p2].name, correct: isCorrect });
-                });
-            }
-            if (connections.length === 0) { container.innerHTML = '<div class="no-connections">Нет подключений</div>'; return; }
-            container.innerHTML = connections.map(c => `
-                <div class="connection-item">
-                    <span class="connection-from">${c.from}</span>
-                    <span class="connection-pins">${c.fromPin}</span>
-                    <span class="connection-arrow">→</span>
-                    <span class="connection-pins">${c.toPin}</span>
-                    <span class="connection-to" style="${c.correct ? 'color:#88ff88' : 'color:#ff8888'}">${c.to}</span>
-                    ${c.correct ? '<span style="color:#0f0;">✅</span>' : '<span style="color:#f00;">❌</span>'}
-                </div>
-            `).join('');
-        }
-
-        function applyConnections(connections) {
-            clearAllWires();
-            connections.forEach(conn => {
-                let fromId = null, toId = null;
-                for (let pid in pinsMap) {
-                    if (pinsMap[pid].component === conn.from && pinsMap[pid].index === conn.fromPin) fromId = pid;
-                    if (pinsMap[pid].component === conn.to && pinsMap[pid].index === conn.toPin) toId = pid;
-                }
-                if (fromId && toId && !pinsMap[fromId].connections.includes(toId)) {
-                    pinsMap[fromId].connections.push(toId);
-                    pinsMap[toId].connections.push(fromId);
-                    pinsMap[fromId].connected = true;
-                    pinsMap[toId].connected = true;
-                    const el1 = document.getElementById(`pin-${fromId}`);
-                    const el2 = document.getElementById(`pin-${toId}`);
-                    const correct = isPinCompatible(pinsMap[fromId], pinsMap[toId]);
-                    if (el1) { el1.classList.add(correct ? 'correct' : 'wrong'); el1.classList.remove('selected'); }
-                    if (el2) { el2.classList.add(correct ? 'correct' : 'wrong'); el2.classList.remove('selected'); }
-                }
-            });
-            redrawWires();
-            updateConnectionsTable();
-        }
-
-        function loadPreset(preset) {
-            for (let [cat, id] of Object.entries(preset.specs)) systemState[cat] = id || null;
-            updateInstalledList();
-            update3DScene();
-            updatePinsPanel();
-            checkCompatibility();
-            if (preset.connections) setTimeout(() => applyConnections(preset.connections), 150);
-            document.getElementById('statusMsg').innerHTML = `✅ Загружена: ${preset.name}`;
-            document.getElementById('statusMsg').className = 'status status-success';
-            setTimeout(() => { if (document.getElementById('statusMsg').innerHTML.includes('Загружена')) document.getElementById('statusMsg').innerHTML = ''; }, 3000);
-        }
-
-        function initPresetButtons() {
-            document.getElementById('presetButtons').innerHTML = presetBuilds.map((b, i) => `<button class="preset-btn" onclick="window.loadPresetByIndex(${i})">${b.name}<br><span style="font-size:0.6rem;">${b.desc}</span></button>`).join('');
-        }
-        window.loadPresetByIndex = (i) => loadPreset(presetBuilds[i]);
-
-        function exitAdminMode() {
-            adminMode = false;
-            document.getElementById('adminBadge').classList.remove('admin-mode-active');
-            document.getElementById('presetBuilds').style.display = 'none';
-        }
-
-        function checkCompatibility() {
-            let ok = true;
-            const psuId = systemState.psu, cpuId = systemState.cpu, gpuId = systemState.gpu;
-            if (psuId && (cpuId || gpuId)) {
-                const psu = componentsDB.find(c => c.id === psuId);
-                let total = 0;
-                if (cpuId) total += componentsDB.find(c => c.id === cpuId).tdp || 0;
-                if (gpuId) total += componentsDB.find(c => c.id === gpuId).tdp || 0;
-                total += 100;
-                if (total > (psu?.wattage || 500)) ok = false;
-            }
-            const status = document.getElementById('statusMsg');
-            if (ok && systemState.cpu && systemState.motherboard && systemState.psu) {
-                status.innerHTML = '✅ Совместимость OK';
-                status.className = 'status status-success';
-                document.getElementById('powerBtn').disabled = false;
-            } else {
-                status.innerHTML = '⚠️ Проверьте совместимость (CPU/материнка, мощность БП)';
-                status.className = 'status status-error';
-                document.getElementById('powerBtn').disabled = true;
+            container.appendChild(section);
+        });
+        redrawWiresUI(); updateConnectionsTable(); checkCompatibilityAndPower();
+    }
+    function handlePinClick(pinId) {
+        if(selectedPin === null) { selectedPin = pinId; document.getElementById(`pin-${pinId}`)?.classList.add('selected'); }
+        else if(selectedPin === pinId) { document.getElementById(`pin-${pinId}`)?.classList.remove('selected'); selectedPin = null; }
+        else { connectPins(selectedPin, pinId); document.getElementById(`pin-${selectedPin}`)?.classList.remove('selected'); selectedPin = null; }
+    }
+    function connectPins(p1, p2) {
+        if(pinsMap[p1].connections.includes(p2)) { showStatus('Уже соединено', false); return; }
+        const pinA = pinsMap[p1], pinB = pinsMap[p2];
+        const compatible = isPinCompatible(pinA, pinB);
+        pinsMap[p1].connections.push(p2); pinsMap[p2].connections.push(p1);
+        const el1 = document.getElementById(`pin-${p1}`), el2 = document.getElementById(`pin-${p2}`);
+        if(compatible) { el1?.classList.add('correct'); el2?.classList.add('correct'); showStatus(`✓ ${pinA.name} ↔ ${pinB.name}`, true);}
+        else { el1?.classList.add('wrong'); el2?.classList.add('wrong'); showStatus(`❌ Ошибка: ${pinA.name} ↔ ${pinB.name}`, false);}
+        el1?.classList.remove('selected'); el2?.classList.remove('selected');
+        redrawWiresUI(); updateConnectionsTable(); update3DWires(); checkCompatibilityAndPower();
+    }
+    function redrawWiresUI() {
+        const container = document.querySelector('.pins-container');
+        if(!container) return;
+        let canvas = document.getElementById('wireCanvas');
+        if(!canvas) { canvas = document.createElement('canvas'); canvas.id = 'wireCanvas'; canvas.style.position = 'absolute'; canvas.style.top='0'; canvas.style.left='0'; canvas.style.width='100%'; canvas.style.height='100%'; canvas.style.pointerEvents='none'; container.style.position='relative'; container.appendChild(canvas); }
+        canvas.width = container.clientWidth; canvas.height = container.clientHeight;
+        const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
+        const rect = container.getBoundingClientRect();
+        for(let p1 in pinsMap) for(let p2 of pinsMap[p1].connections) if(p1<p2) {
+            const el1 = document.getElementById(`pin-${p1}`), el2 = document.getElementById(`pin-${p2}`);
+            if(el1 && el2) {
+                const r1 = el1.getBoundingClientRect(), r2 = el2.getBoundingClientRect();
+                const x1 = r1.left+r1.width/2 - rect.left, y1 = r1.top+r1.height/2 - rect.top;
+                const x2 = r2.left+r2.width/2 - rect.left, y2 = r2.top+r2.height/2 - rect.top;
+                ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+                ctx.strokeStyle = isPinCompatible(pinsMap[p1], pinsMap[p2]) ? '#0f0' : '#f66'; ctx.lineWidth = 3; ctx.stroke();
             }
         }
-
-        function updatePinsPanel() {
-            const container = document.getElementById('pinsContainer');
-            container.innerHTML = '';
-            pinsMap = {};
-            const cats = ['cpu', 'gpu', 'ram', 'motherboard', 'psu', 'ssd', 'hdd', 'cooler'];
-            cats.forEach(cat => {
-                const id = systemState[cat];
-                if (!id) return;
-                const comp = componentsDB.find(c => c.id === id);
-                if (!comp || !comp.pins.length) return;
-                const section = document.createElement('div');
-                section.className = 'component-pins';
-                section.innerHTML = `<h4>${comp.name}</h4><div class="pins-grid" id="pins-${cat}"></div>`;
-                const gridDiv = section.querySelector('.pins-grid');
-                comp.pins.forEach((pinName, idx) => {
-                    const pinId = `${cat}-${idx}`;
-                    pinsMap[pinId] = { component: cat, index: idx, name: pinName, connected: false, powered: false, connections: [] };
-                    const pinDiv = document.createElement('div');
-                    pinDiv.className = 'pin';
-                    pinDiv.id = `pin-${pinId}`;
-                    pinDiv.innerHTML = `<div class="pin-number">${idx+1}</div><div class="pin-name">${pinName}</div>`;
-                    pinDiv.onclick = (e) => { e.stopPropagation(); selectPin(pinId); };
-                    gridDiv.appendChild(pinDiv);
-                });
-                container.appendChild(section);
-            });
-            redrawWires();
-            updateConnectionsTable();
+    }
+    function clearAllWires() { for(let p in pinsMap) pinsMap[p].connections = []; document.querySelectorAll('.pin').forEach(p=>p.classList.remove('correct','wrong','selected')); redrawWiresUI(); updateConnectionsTable(); update3DWires(); if(powerOn){ powerOn=false; document.getElementById('powerLed').classList.remove('green'); document.getElementById('powerBtn').disabled=true; } checkCompatibilityAndPower(); }
+    function resetBuild() { systemState = { cpu: null, gpu: null, ram: null, motherboard: null, psu: null, ssd: null, hdd: null, cooler: null }; attempts=5; powerOn=false; document.getElementById('attemptsText').innerHTML=`⚡ ПОПЫТОК: ${attempts}`; document.getElementById('powerLed').classList.remove('green'); clearAllWires(); updateInstalledList(); update3DScene(); updatePinsPanel(); checkCompatibilityAndPower(); }
+    function checkCompatibilityAndPower() { 
+        let hasEssential = systemState.cpu && systemState.motherboard && systemState.psu;
+        let criticalOk = areCriticalPinsConnected();
+        let powerBtn = document.getElementById('powerBtn');
+        if(!hasEssential) powerBtn.disabled = true;
+        else powerBtn.disabled = powerOn ? true : !criticalOk;
+        if(!powerOn && hasEssential && !criticalOk) showStatus('⚠️ Подключите ОБЯЗАТЕЛЬНЫЕ пины: CPU(VCC_CORE+12V), MB(ATX_24PIN/EPS12V) и PSU', false);
+        else if(!powerOn && hasEssential && criticalOk) showStatus('✅ Все обязательные пины подключены! Можно включить', true);
+    }
+    function showStatus(msg, isGood) { const div = document.getElementById('statusMsg'); div.innerHTML = msg; div.className = `status ${isGood ? 'status-success' : 'status-error'}`; setTimeout(()=>{ if(div.innerHTML===msg) div.innerHTML=''; }, 2500); }
+    function togglePower() {
+        if(attempts <= 0) { showStatus('📢 ПИШИ ЗАЯВЛЕНИЕ НА ОТЧИСЛЕНИЕ!', false); return; }
+        if(powerOn) { powerOn=false; document.getElementById('powerLed').classList.remove('green'); showStatus('Питание отключено', false); document.getElementById('powerBtn').disabled = false; checkCompatibilityAndPower(); return; }
+        let allCorrect = true;
+        for(let p1 in pinsMap) for(let p2 of pinsMap[p1].connections) if(p1>p2 && !isPinCompatible(pinsMap[p1], pinsMap[p2])) allCorrect=false;
+        let criticalReady = areCriticalPinsConnected();
+        if(!allCorrect || !criticalReady) { 
+            attempts--; document.getElementById('attemptsText').innerHTML = `⚡ ПОПЫТОК: ${attempts}`; 
+            showStatus(`❌ ${!criticalReady ? 'Не подключены обязательные пины!' : 'Есть неверные подключения!'} Осталось: ${attempts}`, false); 
+            if(attempts===0) showStatus('📢 ПИШИ ЗАЯВЛЕНИЕ НА ОТЧИСЛЕНИЕ!', false);
+            return; 
         }
+        powerOn = true; document.getElementById('powerLed').classList.add('green'); document.getElementById('powerBtn').disabled = true; showStatus('✅ СИСТЕМА ЗАПУЩЕНА! Все пины корректны!', true);
+    }
 
-        function selectPin(pinId) {
-            const el = document.getElementById(`pin-${pinId}`);
-            if (selectedPin === pinId) {
-                el.classList.remove('selected');
-                selectedPin = null;
-            } else {
-                if (selectedPin) document.getElementById(`pin-${selectedPin}`)?.classList.remove('selected');
-                el.classList.add('selected');
-                selectedPin = pinId;
-            }
-            if (selectedPin) {
-                const other = document.querySelector('.pin.selected');
-                if (other && other.id !== `pin-${selectedPin}`) {
-                    connectPins(selectedPin, other.id.replace('pin-', ''));
-                }
-            }
+    // 3D со СВЕТЛЫМ текстом (белый + легкая тень)
+    function initThree() {
+        const canvas = document.getElementById('threeCanvas');
+        scene = new THREE.Scene(); scene.background = new THREE.Color(0x050510);
+        camera = new THREE.PerspectiveCamera(42, canvas.clientWidth/canvas.clientHeight, 0.1, 1000);
+        camera.position.set(4.2, 3.2, 5.5);
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true;
+        const ambient = new THREE.AmbientLight(0x404070); scene.add(ambient);
+        const dirLight = new THREE.DirectionalLight(0xffffff,1); dirLight.position.set(2,4,3); scene.add(dirLight);
+        const fillLight = new THREE.PointLight(0x88aaff, 0.4); fillLight.position.set(0,2,1); scene.add(fillLight);
+        const grid = new THREE.GridHelper(7,20,0x44aaff,0x3377aa); grid.position.y=-0.7; scene.add(grid);
+        const moboBase = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.12, 2.9), new THREE.MeshStandardMaterial({ color: 0x1a3355, metalness:0.6 }));
+        moboBase.position.set(0, -0.05, 0); scene.add(moboBase);
+        animate();
+        window.addEventListener('resize',()=>{ camera.aspect = canvas.clientWidth/canvas.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(canvas.clientWidth,canvas.clientHeight); });
+    }
+    
+    // СВЕТЛЫЙ текст: белый с легкой черной подложкой для читаемости
+    function createBrightLabel(text, colorHex) {
+        const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Полупрозрачная тёмная подложка для контраста
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+        ctx.fillRect(0, canvas.height/2 - 22, canvas.width, 44);
+        // Белый текст с легким свечением
+        ctx.font = '500 28px "Inter", "Segoe UI"';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.shadowBlur = 0;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, canvas.width/2, canvas.height/2);
+        // Дополнительная обводка для читаемости
+        ctx.font = '500 28px "Inter", "Segoe UI"';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText(text, canvas.width/2, canvas.height/2);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
+        sprite.scale.set(1.5, 0.38, 0.1);
+        return sprite;
+    }
+    
+    function createLabeledCube(color, size, pos, label) {
+        const geo = new THREE.BoxGeometry(size.w, size.h, size.d);
+        const mat = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.12, roughness: 0.4, metalness: 0.3 });
+        const cube = new THREE.Mesh(geo, mat);
+        cube.position.set(pos.x, pos.y, pos.z);
+        const labelSprite = createBrightLabel(label, color);
+        labelSprite.position.set(0, size.h/2 + 0.2, 0);
+        cube.add(labelSprite);
+        return cube;
+    }
+    
+    function update3DScene() {
+        if(!scene) return;
+        components3D.forEach(c=>scene.remove(c)); components3D=[];
+        const colors = { cpu:0x44ddff, gpu:0xff66dd, ram:0x66ccff, ssd:0xffaa44, hdd:0xffaa66, psu:0xff5555, cooler:0x44ddff };
+        const sizes = { cpu:{w:0.8,h:0.3,d:0.6}, gpu:{w:1.1,h:0.6,d:0.4}, ram:{w:0.55,h:0.12,d:0.2}, ssd:{w:0.8,h:0.1,d:0.55}, hdd:{w:1.0,h:0.2,d:0.8}, psu:{w:1.1,h:0.3,d:0.8}, cooler:{w:0.8,h:0.8,d:0.8} };
+        const positions = { cpu:{x:-1.2,y:0.2,z:0}, gpu:{x:1.3,y:0.35,z:0.2}, ram:{x:-0.5,y:0.12,z:0.6}, ssd:{x:-0.8,y:0.1,z:-1.0}, hdd:{x:0.5,y:0.18,z:-1.0}, psu:{x:1.6,y:0.2,z:-0.8}, cooler:{x:-1.2,y:0.55,z:0} };
+        for(let [cat,id] of Object.entries(systemState)) if(id && sizes[cat]) {
+            const comp = componentsDB.find(c=>c.id===id);
+            let shortName = comp ? comp.name.split(' ').slice(0,2).join(' ') : cat;
+            if(shortName.length > 14) shortName = shortName.substring(0,12)+'..';
+            const cube = createLabeledCube(colors[cat], sizes[cat], positions[cat], shortName);
+            scene.add(cube); components3D.push(cube);
         }
-
-        function connectPins(p1, p2) {
-            if (pinsMap[p1].connections.includes(p2)) { alert('Уже соединено'); return; }
-            const correct = isPinCompatible(pinsMap[p1], pinsMap[p2]);
-            pinsMap[p1].connections.push(p2);
-            pinsMap[p2].connections.push(p1);
-            pinsMap[p1].connected = true;
-            pinsMap[p2].connected = true;
-            const el1 = document.getElementById(`pin-${p1}`);
-            const el2 = document.getElementById(`pin-${p2}`);
-            if (el1) { el1.classList.add(correct ? 'correct' : 'wrong'); el1.classList.remove('selected'); }
-            if (el2) { el2.classList.add(correct ? 'correct' : 'wrong'); el2.classList.remove('selected'); }
-            selectedPin = null;
-            redrawWires();
-            updateConnectionsTable();
-            if (!correct) {
-                document.getElementById('statusMsg').innerHTML = '❌ НЕПРАВИЛЬНОЕ ПОДКЛЮЧЕНИЕ! Проверьте напряжение!';
-                document.getElementById('statusMsg').className = 'status status-error';
-                setTimeout(() => { if (document.getElementById('statusMsg').innerHTML.includes('НЕПРАВИЛЬНОЕ')) document.getElementById('statusMsg').innerHTML = ''; }, 2000);
-            }
+        if(dragControls) dragControls.dispose();
+        dragControls = new DragControls(components3D, camera, renderer.domElement);
+        dragControls.addEventListener('dragstart',()=>controls.enabled=false);
+        dragControls.addEventListener('dragend',()=>{ controls.enabled=true; update3DWires(); });
+        update3DWires();
+    }
+    
+    function create3DWire(startComp, endComp, color=0x88ff88) {
+        if(!startComp||!endComp) return null;
+        const start = startComp.position.clone(), end = endComp.position.clone();
+        const mid = new THREE.Vector3((start.x+end.x)/2, (start.y+end.y)/2+0.12, (start.z+end.z)/2);
+        const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+        const tubeGeo = new THREE.TubeGeometry(curve, 24, 0.045, 6, false);
+        return new THREE.Mesh(tubeGeo, new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.5 }));
+    }
+    
+    function update3DWires() {
+        wireLines3D.forEach(w=>scene.remove(w)); wireLines3D=[];
+        const compPos = {};
+        components3D.forEach(c=>{ const col=c.material.color.getHex(); if(col===0x44ddff && c.position.y<0.4) compPos.cpu=c.position.clone(); if(col===0xff66dd) compPos.gpu=c.position.clone(); if(col===0xffaa44 && !compPos.ssd) compPos.ssd=c.position.clone(); if(col===0xffaa66) compPos.hdd=c.position.clone(); if(col===0xff5555) compPos.psu=c.position.clone(); if(col===0x44ddff && c.position.y>0.5) compPos.cooler=c.position.clone(); if(col===0x66ccff) compPos.ram=c.position.clone(); });
+        for(let p1 in pinsMap) for(let p2 of pinsMap[p1].connections) if(p1<p2 && compPos[pinsMap[p1].component] && compPos[pinsMap[p2].component]) {
+            const wire = create3DWire({position:compPos[pinsMap[p1].component]}, {position:compPos[pinsMap[p2].component]}, 0x88ff88);
+            if(wire){ scene.add(wire); wireLines3D.push(wire); }
         }
-
-        function redrawWires() {
-            const canvas = document.getElementById('wireCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const container = document.querySelector('.pins-container');
-            const rect = container.getBoundingClientRect();
-            for (let p1 in pinsMap) {
-                pinsMap[p1].connections.forEach(p2 => {
-                    if (p1 > p2) return;
-                    const el1 = document.getElementById(`pin-${p1}`);
-                    const el2 = document.getElementById(`pin-${p2}`);
-                    if (!el1 || !el2) return;
-                    const r1 = el1.getBoundingClientRect(), r2 = el2.getBoundingClientRect();
-                    const x1 = r1.left + r1.width/2 - rect.left, y1 = r1.top + r1.height/2 - rect.top;
-                    const x2 = r2.left + r2.width/2 - rect.left, y2 = r2.top + r2.height/2 - rect.top;
-                    ctx.beginPath();
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x2, y2);
-                    const correct = isPinCompatible(pinsMap[p1], pinsMap[p2]);
-                    ctx.strokeStyle = correct ? '#0f0' : '#f00';
-                    ctx.lineWidth = 2;
-                    ctx.shadowBlur = 5;
-                    ctx.shadowColor = correct ? '#0f0' : '#f00';
-                    ctx.stroke();
-                });
-            }
-        }
-
-        function clearAllWires() {
-            for (let pid in pinsMap) {
-                pinsMap[pid].connections = [];
-                pinsMap[pid].connected = false;
-                pinsMap[pid].powered = false;
-                document.getElementById(`pin-${pid}`)?.classList.remove('connected', 'powered', 'correct', 'wrong', 'selected');
-            }
-            const canvas = document.getElementById('wireCanvas');
-            if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-            updateConnectionsTable();
-        }
-
-        function resetBuild() {
-            systemState = { cpu: null, gpu: null, ram: null, motherboard: null, psu: null, ssd: null, hdd: null, cooler: null, case: null };
-            attempts = 5; powerOn = false;
-            document.getElementById('attemptsText').innerHTML = `ПОПЫТОК: ${attempts}`;
-            document.getElementById('powerLed').classList.remove('green');
-            document.getElementById('powerBtn').disabled = true;
-            clearAllWires();
-            updateInstalledList();
-            update3DScene();
-            updatePinsPanel();
-            checkCompatibility();
-        }
-
-        function togglePower() {
-            if (attempts <= 0) {
-                document.getElementById('statusMsg').innerHTML = '📢 ПИШИ ЗАЯВЛЕНИЕ НА ОТЧИСЛЕНИЕ! <a href="#" style="color:#0ff;">📚 Литература</a>';
-                return;
-            }
-            if (!powerOn) {
-                let allCorrect = true;
-                for (let p1 in pinsMap) {
-                    for (let p2 of pinsMap[p1].connections) {
-                        if (p1 > p2) continue;
-                        if (!isPinCompatible(pinsMap[p1], pinsMap[p2])) { allCorrect = false; break; }
-                    }
-                    if (!allCorrect) break;
-                }
-                if (!allCorrect) {
-                    attempts--;
-                    document.getElementById('attemptsText').innerHTML = `ПОПЫТОК: ${attempts}`;
-                    document.getElementById('statusMsg').innerHTML = `❌ ЕСТЬ НЕПРАВИЛЬНЫЕ ПОДКЛЮЧЕНИЯ! Осталось попыток: ${attempts}`;
-                    document.getElementById('statusMsg').className = 'status status-error';
-                    if (attempts === 0) document.getElementById('statusMsg').innerHTML = '📢 ПИШИ ЗАЯВЛЕНИЕ НА ОТЧИСЛЕНИЕ!';
-                    return;
-                }
-                powerOn = true;
-                for (let pid in pinsMap) if (pinsMap[pid].connected) { document.getElementById(`pin-${pid}`)?.classList.add('powered'); pinsMap[pid].powered = true; }
-                document.getElementById('powerLed').classList.add('green');
-                document.getElementById('statusMsg').innerHTML = '✅ СИСТЕМА РАБОТАЕТ! Все подключения правильные!';
-                document.getElementById('statusMsg').className = 'status status-success';
-                document.getElementById('powerBtn').disabled = true;
-            } else {
-                powerOn = false;
-                for (let pid in pinsMap) document.getElementById(`pin-${pid}`)?.classList.remove('powered');
-                document.getElementById('powerLed').classList.remove('green');
-                document.getElementById('statusMsg').innerHTML = 'Питание отключено';
-            }
-        }
-
-        // 3D функции
-        function initThree() {
-            const canvas = document.getElementById('threeCanvas');
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a1a);
-            camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-            camera.position.set(5, 4, 7);
-            renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            renderer.shadowMap.enabled = true;
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.screenSpacePanning = true;
-            const ambient = new THREE.AmbientLight(0x404060);
-            scene.add(ambient);
-            const mainLight = new THREE.DirectionalLight(0xffffff, 1);
-            mainLight.position.set(3, 5, 2);
-            mainLight.castShadow = true;
-            scene.add(mainLight);
-            const grid = new THREE.GridHelper(10, 20, 0x44ddff, 0x336699);
-            grid.position.y = -0.5;
-            scene.add(grid);
-            createCase();
-            const mobo = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.1, 2.4), new THREE.MeshStandardMaterial({ color: 0x1e4d2e }));
-            mobo.position.set(0, 0.05, 0);
-            scene.add(mobo);
-            animate();
-            window.addEventListener('resize', () => {
-                camera.aspect = canvas.clientWidth / canvas.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            });
-        }
-
-        function createCase() {
-            const group = new THREE.Group();
-            const floor = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.1, 3.2), new THREE.MeshStandardMaterial({ color: 0x1a1a2a }));
-            floor.position.set(0, -0.4, 0);
-            group.add(floor);
-            const glass = new THREE.MeshStandardMaterial({ color: 0x2a2a3a, transparent: true, opacity: 0.2 });
-            const back = new THREE.Mesh(new THREE.BoxGeometry(4.5, 2.5, 0.1), glass);
-            back.position.set(0, 0.8, -1.6);
-            group.add(back);
-            const left = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3.2), glass);
-            left.position.set(-2.3, 0.8, 0);
-            group.add(left);
-            const right = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3.2), glass);
-            right.position.set(2.3, 0.8, 0);
-            group.add(right);
-            const top = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.1, 3.2), glass);
-            top.position.set(0, 1.8, 0);
-            group.add(top);
-            scene.add(group);
-        }
-
-        function createCube(color, size, pos, name) {
-            const cube = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d), new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.2 }));
-            cube.position.set(pos.x, pos.y, pos.z);
-            cube.castShadow = true;
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(0,0,0,0)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = 'Bold 24px "Segoe UI", "Orbitron", Arial';
-            ctx.fillStyle = '#000000';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 3;
-            ctx.strokeText(name, canvas.width/2, canvas.height/2);
-            ctx.fillText(name, canvas.width/2, canvas.height/2);
-            const texture = new THREE.CanvasTexture(canvas);
-            const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
-            label.scale.set(1.2, 0.6, 0.1);
-            label.position.set(0, size.h/2 + 0.15, 0);
-            cube.add(label);
-            return cube;
-        }
-
-        function update3DScene() {
-            if (!scene) return;
-            components3D.forEach(c => scene.remove(c));
-            components3D = [];
-            const colors = { cpu: 0x44ddff, gpu: 0xff44dd, ram: 0x44ddff, ssd: 0xffaa00, hdd: 0xffaa00, psu: 0xff4444, cooler: 0x44ddff };
-            const sizes = { cpu: { w: 0.7, h: 0.3, d: 0.5 }, gpu: { w: 1.0, h: 0.6, d: 0.3 }, ram: { w: 0.5, h: 0.1, d: 0.15 }, ssd: { w: 0.7, h: 0.1, d: 0.5 }, hdd: { w: 0.9, h: 0.2, d: 0.7 }, psu: { w: 1.0, h: 0.3, d: 0.7 }, cooler: { w: 0.7, h: 0.7, d: 0.7 } };
-            const positions = { cpu: { x: -1.2, y: 0.25, z: 0 }, gpu: { x: 1.2, y: 0.4, z: 0.2 }, ram: { x: -0.4, y: 0.15, z: 0.5 }, ssd: { x: -0.7, y: 0.15, z: -0.9 }, hdd: { x: 0.4, y: 0.2, z: -0.9 }, psu: { x: 1.5, y: 0.25, z: -0.6 }, cooler: { x: -1.2, y: 0.55, z: 0 } };
-            for (let [cat, id] of Object.entries(systemState)) {
-                if (id && sizes[cat]) {
-                    const comp = componentsDB.find(c => c.id === id);
-                    const name = comp ? comp.name.split(' ').slice(0, 2).join(' ') : cat.toUpperCase();
-                    const cube = createCube(colors[cat], sizes[cat], positions[cat] || { x: 0, y: 0, z: 0 }, name);
-                    scene.add(cube);
-                    components3D.push(cube);
-                }
-            }
-            if (dragControls) dragControls.dispose();
-            dragControls = new DragControls(components3D, camera, renderer.domElement);
-            dragControls.addEventListener('dragstart', () => { controls.enabled = false; });
-            dragControls.addEventListener('dragend', () => { controls.enabled = true; });
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        function createWireCanvas() {
-            const container = document.querySelector('.pins-container');
-            if (!container) return;
-            const canvas = document.createElement('canvas');
-            canvas.id = 'wireCanvas';
-            canvas.style.position = 'absolute';
-            canvas.style.top = '0';
-            canvas.style.left = '0';
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.pointerEvents = 'none';
-            canvas.style.zIndex = '10';
-            container.style.position = 'relative';
-            container.appendChild(canvas);
-            const resizeObserver = new ResizeObserver(() => { canvas.width = container.clientWidth; canvas.height = container.clientHeight; redrawWires(); });
-            resizeObserver.observe(container);
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-        }
-
-        // Админ
-        window.openAdminModal = () => { document.getElementById('adminModal').style.display = 'flex'; };
-        window.closeAdminModal = () => { document.getElementById('adminModal').style.display = 'none'; };
-        window.checkAdminPassword = () => {
-            if (document.getElementById('adminPassword').value === '1111') {
-                adminMode = true;
-                document.getElementById('adminBadge').classList.add('admin-mode-active');
-                document.getElementById('presetBuilds').style.display = 'block';
-                window.closeAdminModal();
-                initPresetButtons();
-                document.getElementById('statusMsg').innerHTML = '👑 Админ режим активирован!';
-                document.getElementById('statusMsg').className = 'status status-success';
-                setTimeout(() => { if (document.getElementById('statusMsg').innerHTML === '👑 Админ режим активирован!') document.getElementById('statusMsg').innerHTML = ''; }, 2000);
-                document.getElementById('exitAdminBtn').onclick = () => exitAdminMode();
-            } else { alert('Неверный пароль!'); }
-        };
-
-        function initMain3D() {
-            const canvas = document.getElementById('mainThreeCanvas');
-            if (!canvas) return;
-            mainScene = new THREE.Scene();
-            mainScene.background = new THREE.Color(0x0a0a1a);
-            mainCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-            mainCamera.position.set(5, 3, 8);
-            mainRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-            mainRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            const ambient = new THREE.AmbientLight(0x404060);
-            mainScene.add(ambient);
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(2, 5, 3);
-            mainScene.add(light);
-            const group = new THREE.Group();
-            for (let i = 0; i < 30; i++) {
-                const cube = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.25, 0.25), new THREE.MeshStandardMaterial({ color: 0x44ddff }));
-                cube.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 6, (Math.random() - 0.5) * 12 - 4);
-                cube.userData = { speed: 0.003 };
-                group.add(cube);
-            }
-            mainScene.add(group);
-            const torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.08, 32, 100), new THREE.MeshStandardMaterial({ color: 0xff44dd, emissive: 0xff44dd }));
-            torus.rotation.x = Math.PI / 2;
-            mainScene.add(torus);
-            function animateMain() {
-                requestAnimationFrame(animateMain);
-                torus.rotation.z += 0.01;
-                group.children.forEach(c => c.rotation.x += c.userData.speed);
-                mainRenderer.render(mainScene, mainCamera);
-            }
-            animateMain();
-        }
-
-        function init() {
-            initMain3D();
-            loadCategories();
-            loadComponentsUI();
-            updateInstalledList();
-            initThree();
-            createWireCanvas();
-            document.getElementById('resetBtn').onclick = () => resetBuild();
-            document.getElementById('clearWiresBtn').onclick = () => clearAllWires();
-            document.getElementById('powerBtn').onclick = () => togglePower();
-            document.getElementById('searchInput').oninput = () => searchComponents();
-            document.getElementById('adminBadge').onclick = () => window.openAdminModal();
-            setInterval(() => {
-                const canvas = document.getElementById('arrowCanvas');
-                if (canvas && canvas.width !== canvas.clientWidth) { canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; updateConnectionsTable(); }
-            }, 500);
-        }
-        init();
-    </script>
+    }
+    
+    function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
+    
+    function loadCategories() {
+        const cats = ['all','cpu','gpu','ram','motherboard','psu','ssd','hdd','cooler'];
+        const container = document.getElementById('categories');
+        container.innerHTML = cats.map(c=>`<button class="cat-btn ${c==='all'?'active':''}" data-cat="${c}">${c.toUpperCase()}</button>`).join('');
+        document.querySelectorAll('.cat-btn').forEach(btn=>btn.addEventListener('click',()=>{
+            document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            filterComponents(btn.dataset.cat);
+        }));
+    }
+    
+    function filterComponents(cat) {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        document.querySelectorAll('.component-card').forEach(card=>{
+            const matchCat = cat==='all' || card.dataset.category===cat;
+            const nameEl = card.querySelector('.comp-name');
+            const matchName = nameEl ? nameEl.innerText.toLowerCase().includes(query) : false;
+            card.classList.toggle('hidden', !(matchCat && matchName));
+        });
+    }
+    
+    function loadComponentsUI() {
+        const grid = document.getElementById('componentsGrid');
+        grid.innerHTML = componentsDB.map(comp => `<div class="component-card" data-category="${comp.category}"><div class="comp-name">${comp.name}</div><div class="comp-specs"><span>🔌 ${comp.pins.length} пина</span><span>⚡ ${comp.tdp || '—'}W</span></div><button class="add-btn" data-id="${comp.id}">➕ Установить</button></div>`).join('');
+        document.querySelectorAll('.add-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); addComponent(btn.dataset.id); }));
+    }
+    
+    function loadPreset(idx) { 
+        const preset = presetBuilds[idx]; 
+        for(let [cat,id] of Object.entries(preset.specs)) if(id) systemState[cat]=id; 
+        updateInstalledList(); update3DScene(); updatePinsPanel(); checkCompatibilityAndPower(); clearAllWires(); 
+        showStatus(`✅ Загружена сборка: ${preset.name}`, true); 
+    }
+    
+    function init() { 
+        loadCategories(); loadComponentsUI(); updateInstalledList(); initThree(); updatePinsPanel(); 
+        document.getElementById('resetBtn').onclick=resetBuild; 
+        document.getElementById('clearWiresBtn').onclick=clearAllWires; 
+        document.getElementById('powerBtn').onclick=togglePower; 
+        document.getElementById('searchInput').oninput=()=>filterComponents(document.querySelector('.cat-btn.active')?.dataset.cat||'all');
+        document.getElementById('adminBadge').onclick=()=>document.getElementById('adminModal').style.display='flex';
+        document.getElementById('exitAdminBtn').onclick=()=>{ adminMode=false; document.getElementById('presetBuilds').style.display='none'; document.getElementById('adminBadge').classList.remove('admin-mode-active'); };
+        window.checkAdminPassword=()=>{ if(document.getElementById('adminPassword').value==='1111'){ adminMode=true; document.getElementById('adminBadge').classList.add('admin-mode-active'); document.getElementById('presetBuilds').style.display='block'; document.getElementById('presetButtons').innerHTML=presetBuilds.map((b,i)=>`<button class="preset-btn" onclick="window.loadPreset(${i})">${b.name}</button>`).join(''); document.getElementById('adminModal').style.display='none'; showStatus('Админ режим активирован',true); } else alert('Неверный пароль'); };
+        window.closeAdminModal=()=>document.getElementById('adminModal').style.display='none';
+        window.loadPreset=loadPreset;
+        window.startBuilder=()=>{ document.getElementById('mainScreen').classList.add('hide'); setTimeout(()=>{ document.getElementById('mainScreen').style.display='none'; document.getElementById('appContainer').classList.add('visible'); },500); };
+        document.getElementById('globalStartBtn').onclick=()=>window.startBuilder();
+        setInterval(()=>{ const container=document.querySelector('.pins-container'); if(container&&document.getElementById('wireCanvas')){ const canv=document.getElementById('wireCanvas'); if(canv.width!==container.clientWidth){ canv.width=container.clientWidth; canv.height=container.clientHeight; redrawWiresUI(); } } update3DWires(); },400);
+    }
+    init();
+</script>
 </body>
 </html>
